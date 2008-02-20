@@ -64,7 +64,7 @@ L<RT::BugTracker::Public>'s doc.
 use Hook::LexWrap;
 wrap 'RT::Principal::HasRight', pre => sub {
     my $self = $_[0];
-    return unless lc $self->Object->__Value('Name') eq lc($WebPublicUser || 'guest');
+    return unless lc $self->Object->__Value('Name') eq lc($RT::WebPublicUser || 'guest');
 
     my %args = @_[1 .. (@_-2)];
     return unless $args{'Right'} eq 'CreateTicket'
