@@ -48,7 +48,8 @@
 
 package RT::Extension::rt_cpan_org;
 
-our $VERSION = '0.01';
+use v5.8.3;
+our $VERSION = '0.02';
 
 1;
 

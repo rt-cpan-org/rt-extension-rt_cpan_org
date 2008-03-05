@@ -16,4 +16,5 @@ no_index:
     - t
 requires: 
   Hook::LexWrap: 0
-version: 0.01
+  perl: 5.8.3
+version: 0.02
