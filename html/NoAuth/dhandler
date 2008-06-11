@@ -49,19 +49,19 @@
 my $path = $m->dhandler_arg;
 
 if    ($path =~ m|^ReportBug.html|) {
-    $m->redirect('/Public/Bug/Report.html?Queue=' . $ARGS{Queue});
+    $m->redirect( $RT::WebPath .'/Public/Bug/Report.html?Queue=' . $ARGS{Queue});
 }
 elsif ($path =~ m|^Bugs.html|) {
-    $m->redirect('/Public/Dist/Display.html?Name=' . $ARGS{Dist});
+    $m->redirect( $RT::WebPath .'/Public/Dist/Display.html?Name=' . $ARGS{Dist});
 }
 elsif ($path =~ m|^Dists.html|) {
-    $m->redirect('/Public/Search/Simple.html?q=' . $ARGS{Queue});
+    $m->redirect( $RT::WebPath .'/Public/Search/Simple.html?q=' . $ARGS{Queue});
 }
 elsif ($path =~ m|^Bug.html|) {
-    $m->redirect('/Public/Bug/Display.html?id=' . $ARGS{id});
+    $m->redirect( $RT::WebPath .'/Public/Bug/Display.html?id=' . $ARGS{id});
 }
 elsif ($path =~ m|^bugs.tsv|) {
-    $m->redirect('/Public/Dist/bugs.tsv?Dist=' . $ARGS{Dist});
+    $m->redirect( $RT::WebPath .'/Public/Dist/bugs.tsv?Dist=' . $ARGS{Dist});
 }
 else {
     $m->decline;
