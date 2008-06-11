@@ -47,6 +47,14 @@
 %# END BPS TAGGED BLOCK }}}
 <%INIT>
 
+# TODO: change is if there better way to check http vs. https
+if ( ($ENV{'SERVER_PORT'}||0) == 80 ) {
+    s/^https:/http:/ for $RT::WebURL, $RT::WebBaseURL;
+}
+elsif ( ($ENV{'SERVER_PORT'}||0) == 443 ) {
+    s/^http:/https:/ for $RT::WebURL, $RT::WebBaseURL;
+}
+
 # Roll back any dangling transactions from a previous failed connection
 $RT::Handle->ForceRollback() if $RT::Handle->TransactionDepth;
 
@@ -102,6 +110,7 @@ if ( $m->request_comp->attr_exists('AutoFlush') ) {
 # is copied from mason's source to get the same results as we get from
 # call_next method, this feature is not documented, so we just leave it
 # here to avoid possible side effects.
+
 # This code canonicalizes time inputs in hours into minutes
 foreach my $field ( keys %ARGS ) {
     next unless $field =~ /^(.*)-TimeUnits$/i && $ARGS{$1};
@@ -198,7 +207,7 @@ elsif ($RT::WebExternalAuth) {
             }
             else {
 
-                # we failed to successfully create the user. abort abort abort.
+               # we failed to successfully create the user. abort abort abort.
                 delete $session{'CurrentUser'};
                 $m->abort() unless $RT::WebFallbackToInternalAuth;
                 $m->comp( '/Elements/Login', %ARGS,
@@ -210,7 +219,7 @@ elsif ($RT::WebExternalAuth) {
             delete $session{'CurrentUser'};
             $user = $orig_user;
 
-            if ( $RT::WebExternalOnly ) {
+            if ($RT::WebExternalOnly) {
                 $m->comp( '/Elements/Login', %ARGS,
                     Error => loc('You are not an authorized user') );
                 $m->abort();
