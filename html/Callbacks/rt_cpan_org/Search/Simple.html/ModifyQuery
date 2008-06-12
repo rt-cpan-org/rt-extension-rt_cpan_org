@@ -48,5 +48,7 @@
 <%INIT>
 # If users type the name of a module, convert the double colons (::) to
 # hyphens (-)
+# TODO: it's not guaranted that this callback would be called earlier than
+# BugTracker's
 ${$ARGS{query}} =~ s/::/-/g;
 </%INIT>
