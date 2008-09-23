@@ -48,11 +48,11 @@
 <%INIT>
 
 # TODO: change is if there better way to check http vs. https
-if ( ($ENV{'SERVER_PORT'}||0) == 80 ) {
-    s/^https:/http:/ for $RT::WebURL, $RT::WebBaseURL;
-}
-elsif ( ($ENV{'SERVER_PORT'}||0) == 443 ) {
+if ( ($ENV{'SERVER_PORT'}||0) == 443 || ($ENV{HTTPS}||'') eq 'on' ) {
     s/^http:/https:/ for $RT::WebURL, $RT::WebBaseURL;
+}
+else {
+    s/^https:/http:/ for $RT::WebURL, $RT::WebBaseURL;
 }
 
 # Roll back any dangling transactions from a previous failed connection
@@ -286,8 +286,8 @@ if (    ( defined $session{'CurrentUser'} )
 # If we have no credentials
 else {
     # check if we are in HTTPS mode
-    if (    not defined $ENV{'HTTP_X_FORWARDED_HOST'}
-        and not defined $ARGS{nossl})
+    if ( not defined $ARGS{nossl} 
+        and (not defined $ENV{'HTTP_X_FORWARDED_HOST'} or ($ENV{'HTTPS'}||'') ne 'on' ))
     {
         $m->redirect('https://'.$ENV{SERVER_NAME}.$ENV{REQUEST_URI});
     }
