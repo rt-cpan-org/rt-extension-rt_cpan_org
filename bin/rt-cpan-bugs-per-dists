@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+eval { require RT; 1 } or do {
+    print STDERR "$@\n\nusage: perl -I /opt/rt3/local/lib -I/opt/rt3/lib $0 > results.tsv\n";
+    exit 1;
+};
+
+RT::LoadConfig();
+RT::Init();
+
+{ my $ttt = $RT::Handle; } # stop warning
+my $dbh = $RT::Handle->dbh;
+$dbh->{RaiseError} = 1;
+
+
+my $query = q{
+    SELECT q.Name, t.Status, count(1)
+    FROM Tickets t, Queues q
+    WHERE
+        t.Queue = q.id
+        AND t.Type = ?
+        AND t.id = t.EffectiveId
+        AND t.Status IS NOT NULL
+
+    GROUP BY q.Name, t.Status
+    ORDER BY q.Name
+};
+my $sth = $dbh->prepare($query);
+$sth->execute('ticket');
+
+my @statuses = qw(new open stalled resolved rejected);
+
+my $date = `date`;
+chomp $date;
+print "# Generated on date\n";
+print "# ", join("\t", "dist", @statuses), "\n";
+
+my %buffer = ('dist' => '');
+while (my ($dist, $status, $count) = $sth->fetchrow_array) {
+    if ( $buffer{dist} && $buffer{dist} ne $dist ) {
+        print join("\t", $buffer{dist}, map $_ || 0, @{ $buffer{counts} }{ @statuses } ), "\n";
+
+        %buffer = ( dist => $dist, counts => { $status => $count } );
+    } else {
+        $buffer{dist} ||= $dist;
+        $buffer{counts}{ $status } = $count;
+    }
+}
+print join("\t", $buffer{dist}, map $_ || 0, @{ $buffer{counts} }{ @statuses } ), "\n";
+
