@@ -287,8 +287,9 @@ if (    ( defined $session{'CurrentUser'} )
 else {
     # check if we are in HTTPS mode
     if ( not defined $ARGS{nossl} 
-        and (not defined $ENV{'HTTP_X_FORWARDED_HOST'} or ($ENV{'HTTPS'}||'') ne 'on' ))
-    {
+        and not defined $ENV{'HTTP_X_FORWARDED_HOST'}
+        and ($ENV{'HTTPS'}||'') ne 'on'
+    ) {
         $m->redirect('https://'.$ENV{SERVER_NAME}.$ENV{REQUEST_URI});
     }
     $m->comp( '/Elements/Login', %ARGS );
