@@ -1,0 +1,78 @@
+#!/home/rtcpan/perl/bin/perl
+
+my $perl = $ENV{'PERL'} = '/home/rtcpan/perl/bin/perl';
+
+my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt3";
+
+my $rt_opts =
+     " --prefix=$root"
+    ." --with-db-type=mysql"
+    ." --with-db-host=''" # connect via socket
+    ." --with-db-port=3307"
+    ." --with-db-database=rt_cpan_org"
+    ." --with-web-user=rtcpan"
+    ." --with-web-group=rtcpan";
+
+use File::Temp qw(tempdir);
+use File::Path qw(rmtree);
+
+my @UPDATE = qw{
+    RT-Extension-MergeUsers
+    RT-Authen-Bitcard
+    RT-Authen-PAUSE
+    RT-BugTracker
+    RT-BugTracker-Public
+    RT-Extension-rt_cpan_org
+    RT-Extension-QuickDelete
+    RT-Authen-OpenID
+    CPAN2RT
+};
+
+my %REPOS = (
+    'CPAN2RT'                  => 'svn://svn.bestpractical.com/CPAN2RT/',
+    'RT-Authen-Bitcard'        => 'svn://svn.bestpractical.com/RT-Authen-Bitcard/',
+    'RT-Authen-OpenID'         => 'svn://svn.bestpractical.com/RT-Authen-OpenID/',
+    'RT-Authen-PAUSE'          => 'svn://svn.bestpractical.com/RT-Authen-PAUSE/',
+    'RT-BugTracker'            => 'svn://svn.bestpractical.com/RT-BugTracker/',
+    'RT-BugTracker-Public'     => 'svn://svn.bestpractical.com/RT-BugTracker-Public/',
+    'RT-Extension-MergeUsers'  => 'svn://svn.bestpractical.com/RT-Extension-MergeUsers/',
+    'RT-Extension-QuickDelete' => 'svn://svn.bestpractical.com/RT-Extension-QuickDelete/',
+    'RT-Extension-rt_cpan_org' => 'svn://svn.bestpractical.com/RT-Extension-rt_cpan_org/',
+);
+
+my $tmp_dir = tempdir( CLEAN => 1 )
+    or die "Couldn't get temp dir";
+
+chdir $tmp_dir;
+
+my $repo = 'svn://svn.bestpractical.com/rt/branches/3.6-RELEASE/';
+($_ = `svn export --quiet --non-interactive --force $repo`)
+    or !$? or die "$_\n\nCouldn't export repo";
+($_ = `cd 3.6-RELEASE && sh ./configure.ac $rt_opts && sudo make upgrade`)
+    or !$? or die "$_\n\nCouldn't upgrade RT";
+
+
+foreach my $module (@UPDATE) {
+    print "Trying to install $module...\n";
+
+    my $repo = $REPOS{ $module };
+    print "Getting $repo...\n";
+    ($_ = `svn export --quiet --non-interactive --force $repo $module`)
+        or !$? or die "$_\n\nCouldn't export repo";
+
+    print "Installing $module...\n";
+    ($_ = `cd $module && $perl ./Makefile.PL && make && sudo make install`)
+        or !$? or die "$_\n\nCouldn't install module";
+
+    rmtree($module);
+}
+
+# adjust bugs-per-dist.data and queue-addresses
+foreach my $path (qw(/local/html/Public/bugs-per-dist.data /local/html/NoAuth/cpan/queue-addresses)) {
+    my $f = $root . $path;
+    `touch $f` unless -e $f;
+    ($_ = `chown rtcpan:rtcpan $f`)
+        or !$? or die "$_\n\nCouldn't change owner of '$f'";
+}
+
+exit 0;
