@@ -45,15 +45,28 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
+<%flags>
+inherit => undef
+</%flags>
 <%init>
 $r->content_type("text/plain");
 
-my $fh;
-if ( open $fh, "<", "/opt/rt/rt.cpan.org-managed/local/html/Public/bugs-per-dist.data" ) {
+my $fname = '';
+foreach my $test ( map "$_/Public/bugs-per-dist.data", $self->interp->comp_root_array ) {
+    next unless -f $test;
+
+    $fname = $test;
+    last;
+}
+
+unless ( $fname ) {
+    print "# Couldn't find data file";
+    return;
+}
+
+if ( open my $fh, "<", $fname ) {
     print while <$fh>;
 } else {
     print "# Error reading data file: $!\n";
 }
-
-$m->abort;
 </%init>
