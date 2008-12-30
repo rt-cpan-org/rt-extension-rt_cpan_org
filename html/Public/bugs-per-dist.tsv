@@ -52,7 +52,7 @@ inherit => undef
 $r->content_type("text/plain");
 
 my $fname = '';
-foreach my $test ( map "$_/Public/bugs-per-dist.data", $self->interp->comp_root_array ) {
+foreach my $test ( map "$_/Public/bugs-per-dist.data", map $_->[1], $m->interp->comp_root_array ) {
     next unless -f $test;
 
     $fname = $test;
