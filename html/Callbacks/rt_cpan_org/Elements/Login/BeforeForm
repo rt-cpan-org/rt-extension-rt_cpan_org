@@ -52,35 +52,51 @@
       <a href="http://cpan.org">CPAN</a>.
     </p>
 
+    <h2>Want to...</h2>
+
+    <h2>... find a distribution and browse its bugs?</h2>
     <p>
-      To report bugs in perl itself, you're best off using the command-line 'perlbug' tool or
-      <a href="http://rt.perl.org">rt.perl.org.</a>
+      This site lets you <a href="<% $RT::WebBaseURL %>/Public/">search
+      for distributions</a> by name or author.  When you've found the
+      distribution you're looking for, you can browse known bugs and
+      report new bugs.
     </p>
 
+    <h2>... report a bug in a module using web-interface?</h2>
     <p>
-      This site lets you <a href="<% $RT::WebBaseURL %>/Public/?nossl=true">search for distributions</a> by name or author.  When you've found the
-      distribution you're looking for, you can browse known bugs and report new bugs.
+      Use <a href="https://www.bitcard.org/">Bitcard</a> account.
+      Module authors can use PAUSE credentials.
     </p>
 
+    <h2>... report a bug in a module using email?</h2>
     <p>
-      To work with bugs, every module author with a <a href="http://pause.perl.org">PAUSE</a>
-      account can log into rt.cpan.org with their PAUSE userid and password.  If you can't
-      log in or distributions you maintain aren't listed, please write to
-      <a href="mailto:rt-cpan-admin@bestpractical.com">rt-cpan-admin@bestpractical.com</a>
-      at your earliest convenience.
+      To submit a bug report for a given distribution by email, send mail
+      to <strong>bug-&lt;distribution-name&gt;@rt.cpan.org</strong>, where
+      "&lt;distribution-name&gt;" is something like DBIx-SearchBuilder or
+      Class-DBI or Acme-Current-Forever. Use
+      <a href="<% $RT::WebBaseURL %>/Public/">search</a> to find name of
+      a distribution.
     </p>
 
+    <h2>... report a bug in perl itself?</h2>
+    <p>
+      To report bugs in perl itself, you're best off using the command-line
+      'perlbug' tool or <a href="http://rt.perl.org">rt.perl.org.</a>
+    </p>
+
+    <h2>... manage bugs in your distributions?</h2>
+    <p>
+      To work with bugs, every module author with a
+      <a href="http://pause.perl.org">PAUSE</a> account can log into
+      rt.cpan.org with their PAUSE userid and password. If you can't log in or
+      distributions you maintain aren't listed, please write to
+      rt-cpan-admin@bestpractical.com at your earliest convenience.
+    </p>
+
+    <h2>... ask question about this service?</h2>
     <p>
       If you have any questions <b>about rt.cpan.org</b>, feel free to send mail to
-      <a href="mailto:rt-cpan-admin@bestpractical.com">rt-cpan-admin@bestpractical.com</a> and
-      we'll do our best to get back to you.
-    </p>
-
-    <p>
-      To submit a bug report for a given distribution by email, send mail to
-      <strong>bug-&lt;distribution-name&gt;@rt.cpan.org</strong>, where
-      "&lt;distribution-name&gt;" is something like DBIx-SearchBuilder or
-      Class-DBI or Acme-Current-Forever.
+      rt-cpan-admin@bestpractical.com and we'll do our best to get back to you.
     </p>
 
     <p>
