@@ -64,7 +64,7 @@
 
     <h2>... report a bug in a module using web-interface?</h2>
     <p>
-      Use <a href="https://www.bitcard.org/">Bitcard</a> account.
+      Use <a href="https://www.bitcard.org/">Bitcard</a> or OpenID account.
       Module authors can use PAUSE credentials.
     </p>
 
@@ -93,10 +93,9 @@
       rt-cpan-admin@bestpractical.com at your earliest convenience.
     </p>
 
-    <h2>... ask question about this service?</h2>
+    <h2>... know more about this service?</h2>
     <p>
-      If you have any questions <b>about rt.cpan.org</b>, feel free to send mail to
-      rt-cpan-admin@bestpractical.com and we'll do our best to get back to you.
+      Read <a href="<% $RT::WebBaseURL %>/Public/RT/CPAN/About.html">this document</a>.
     </p>
 
     <p>
