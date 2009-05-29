@@ -1,5 +1,6 @@
+<& /Elements/Header, Title => loc('About rt.cpan.org') &>
 
-<div id="rtcpan-explanation">
+<div id="rtcpan-about" style="clear:both; margin-left: 2em;">
  
     <h2>What is this all about?</h2>
     <p>
@@ -18,7 +19,9 @@
     <p>rt.cpan.org has some customizations which tie it to particular RT version, at this
     moment (2009-05) it's RT 3.6.HEAD.</p>
 
-    <p>You can start exploring the source code from
+    <p>You can start from checking out from the repository:<br />
+    <pre>    svn co svn://svn.bestpractical.com/RT-Extension-rt_cpan_org</pre><br />
+    Or explore the source code via UI at
     <a href="http://svn.bestpractical.com/cgi-bin/index.cgi/bps/browse/RT-Extension-rt_cpan_org">RT-Extension-rt_cpan_org</a>.
     There is <a href="http://svn.bestpractical.com/cgi-bin/index.cgi/bps/view/RT-Extension-rt_cpan_org/bin/pull-live">a script in the bin directory</a>
     of the extension that installs everything.</p>
