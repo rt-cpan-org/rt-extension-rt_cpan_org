@@ -51,7 +51,7 @@ body { background-color: white; }
 
 .ticket-transaction .messagebody {
     /*white-space: pre;*/
-    font-family: "Andale Mono", monospaced;
+    font-family: "Andale Mono", monospace;
     font-size: 0.9em;
 }
 
