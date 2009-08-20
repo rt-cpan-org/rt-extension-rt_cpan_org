@@ -49,7 +49,7 @@ unless ( $dbh ) {
 $dbh->do(<<'END_SQL');
 CREATE TABLE ticket (
     id INTEGER NOT NULL PRIMARY KEY,
-    queue TEXT NOT NULL,
+    distribution TEXT NOT NULL,
     subject TEXT NOT NULL,
     status TEXT NOT NULL,
     severity TEXT,
@@ -65,7 +65,7 @@ $dbh->commit;
 
 # Generate the indexes on the table
 $dbh->do("CREATE INDEX ticket__id       on ticket ( id       )");
-$dbh->do("CREATE INDEX ticket__queue    on ticket ( queue    )");
+$dbh->do("CREATE INDEX ticket__distribution    on ticket ( distribution    )");
 $dbh->do("CREATE INDEX ticket__subject  on ticket ( subject  )");
 $dbh->do("CREATE INDEX ticket__status   on ticket ( status   )");
 $dbh->do("CREATE INDEX ticket__severity on ticket ( severity )");
@@ -91,9 +91,9 @@ exit(0);
 my $count = 0;
 sub insert_ticket {
     my %col = @_;
-    $dbh->do("INSERT INTO ticket ( id, queue, subject, status, severity, created, updated ) VALUES ( ?, ?, ?, ?, ?, ?, ? )", {},
+    $dbh->do("INSERT INTO ticket ( id, distribution, subject, status, severity, created, updated ) VALUES ( ?, ?, ?, ?, ?, ?, ? )", {},
         $col{id},
-        $col{queue},
+        $col{distribution},
         $col{subject},
         $col{status},
         $col{severity},
@@ -116,16 +116,16 @@ sub fill_tickets {
 
     while ( my $ticket = fetch_next() ) {
         my $tmp = $severity->ValuesForObject( $ticket )->First;
-        $tmp = $tmp->Content if $tmp;
+        $tmp = lc $tmp->Content if $tmp;
         # Create a ticket
         insert_ticket (
-            id       => $ticket->id,
-            queue    => $ticket->QueueObj->Name,
-            subject  => $ticket->Subject,
-            status   => $ticket->Status,
-            severity => $tmp,
-            created  => $ticket->Created,
-            updated  => $ticket->LastUpdated,
+            id           => $ticket->id,
+            distribution => $ticket->QueueObj->Name,
+            subject      => $ticket->Subject,
+            status       => $ticket->Status,
+            severity     => $tmp,
+            created      => $ticket->Created,
+            updated      => $ticket->LastUpdated,
         );
     }
 }

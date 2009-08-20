@@ -68,10 +68,10 @@ foreach my $module (@UPDATE) {
 }
 
 # adjust bugs-per-dist.data and queue-addresses
-foreach my $path (qw(/local/html/Public/bugs-per-dist.data /local/html/NoAuth/cpan/queue-addresses)) {
+foreach my $path (qw(/local/html/Public/bugs-per-dist.data /local/html/NoAuth/cpan)) {
     my $f = $root . $path;
     `touch $f` unless -e $f;
-    ($_ = `chown rtcpan:rtcpan $f`)
+    ($_ = `chown -R rtcpan:rtcpan $f`)
         or !$? or die "$_\n\nCouldn't change owner of '$f'";
 }
 
