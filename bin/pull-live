@@ -1,5 +1,15 @@
 #!/home/rtcpan/perl/bin/perl
 
+use Getopt::Long;
+
+my (@skip, @only);
+GetOptions(
+    "skip=s@" => \@skip,
+    "only=s@" => \@only,
+);
+
+sub skip($);
+
 my $perl = $ENV{'PERL'} = '/home/rtcpan/perl/bin/perl';
 
 my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt3";
@@ -24,6 +34,7 @@ my @UPDATE = qw{
     RT-BugTracker-Public
     RT-Extension-rt_cpan_org
     RT-Extension-QuickDelete
+    RT-Extension-ReportSpam
     RT-Authen-OpenID
     CPAN2RT
 };
@@ -35,9 +46,10 @@ my %REPOS = (
     'RT-Authen-PAUSE'          => 'svn://svn.bestpractical.com/RT-Authen-PAUSE/',
     'RT-BugTracker'            => 'svn://svn.bestpractical.com/RT-BugTracker/',
     'RT-BugTracker-Public'     => 'svn://svn.bestpractical.com/RT-BugTracker-Public/',
-    'RT-Extension-MergeUsers'  => 'svn://svn.bestpractical.com/RT-Extension-MergeUsers/',
+    'RT-Extension-MergeUsers'  => 'git://github.com/bestpractical/rt-extension-mergeusers.git',
     'RT-Extension-QuickDelete' => 'svn://svn.bestpractical.com/RT-Extension-QuickDelete/',
     'RT-Extension-rt_cpan_org' => 'svn://svn.bestpractical.com/RT-Extension-rt_cpan_org/',
+    'RT-Extension-ReportSpam'  => 'svn://svn.bestpractical.com/RT-Extension-ReportSpam/',
 );
 
 my $tmp_dir = tempdir( CLEAN => 1 )
@@ -45,20 +57,29 @@ my $tmp_dir = tempdir( CLEAN => 1 )
 
 chdir $tmp_dir;
 
-my $repo = 'svn://svn.bestpractical.com/rt/branches/3.6-RELEASE/';
-($_ = `svn export --quiet --non-interactive --force $repo`)
-    or !$? or die "$_\n\nCouldn't export repo";
-($_ = `cd 3.6-RELEASE && sh ./configure.ac $rt_opts && sudo make upgrade`)
-    or !$? or die "$_\n\nCouldn't upgrade RT";
+unless ( skip 'RT' ) {
+    my $repo = 'git://github.com/bestpractical/rt.git';
+    ($_ = `git clone $repo`)
+        or !$? or die "$_\n\nCouldn't export repo";
+    ($_ = `cd rt && git checkout origin/3.6-trunk && sh ./configure.ac $rt_opts && sudo make upgrade`)
+        or !$? or die "$_\n\nCouldn't upgrade RT";
+}
 
 
 foreach my $module (@UPDATE) {
+    next if skip $module;
+
     print "Trying to install $module...\n";
 
     my $repo = $REPOS{ $module };
     print "Getting $repo...\n";
+    if ( $repo =~ /^svn/ ) {
     ($_ = `svn export --quiet --non-interactive --force $repo $module`)
         or !$? or die "$_\n\nCouldn't export repo";
+    } else {
+    ($_ = `git clone $repo $module`)
+        or !$? or die "$_\n\nCouldn't export repo";
+    }
 
     print "Installing $module...\n";
     ($_ = `cd $module && $perl ./Makefile.PL && make && sudo make install`)
@@ -76,3 +97,11 @@ foreach my $path (qw(/local/html/Public/bugs-per-dist.data /local/html/NoAuth/cp
 }
 
 exit 0;
+
+sub skip($) {
+    my $name = shift;
+    return 1 if @skip &&  grep $name eq $_, @skip;
+    return 1 if @only && !grep $name eq $_, @only;
+    return 0;
+}
+
