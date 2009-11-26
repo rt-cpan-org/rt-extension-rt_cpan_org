@@ -1,8 +1,8 @@
 %# BEGIN BPS TAGGED BLOCK {{{
 %# 
 %# COPYRIGHT:
-%#  
-%# This software is Copyright (c) 1996-2007 Best Practical Solutions, LLC 
+%# 
+%# This software is Copyright (c) 1996-2009 Best Practical Solutions, LLC
 %#                                          <jesse@bestpractical.com>
 %# 
 %# (Except where explicitly superseded by other copyright notices)
@@ -51,33 +51,34 @@
     current_tab => "Ticket/ModifyAll.html?id=".$Ticket->Id, 
     Title => loc("Ticket #[_1] Jumbo update: [_2]", $Ticket->Id, $Ticket->Subject) &>
 
+% $m->callback(CallbackName => 'BeforeActionList', Actions => \@results, ARGSRef => \%ARGS, Ticket => $Ticket);
 <& /Elements/ListActions, actions => \@results &>
 
 <form method="post" action="ModifyAll.html" enctype="multipart/form-data">
-<& /Elements/Callback, _CallbackName => 'FormStart',ARGSRef =>\%ARGS &>
+% $m->callback( CallbackName => 'FormStart', ARGSRef => \%ARGS );
 <input type="hidden" class="hidden" name="id" value="<%$Ticket->Id%>" />
 
-<&| /Widgets/TitleBox, title => loc('Modify ticket # [_1]', $Ticket->Id) &>
+<&| /Widgets/TitleBox, title => loc('Modify ticket # [_1]', $Ticket->Id), class=>'ticket-info-basics' &>
 <& Elements/EditBasics, TicketObj => $Ticket &>
 <& Elements/EditCustomFields, TicketObj => $Ticket &>
 </&>
 
 <br />
 
-<&| /Widgets/TitleBox, title => loc('Dates') &>
+<&| /Widgets/TitleBox, title => loc('Dates'), class=>'ticket-info-dates'&>
 <& Elements/EditDates, TicketObj => $Ticket &>
 </&>
 
 <br />
 
 
-<&| /Widgets/TitleBox, title => loc('People') &>
-<& Elements/EditPeople, Ticket => $Ticket, UserField => $UserField, UserString => $UserString, UserOp => $UserOp &>
+<&| /Widgets/TitleBox, title => loc('People'), class=>'ticket-info-people' &>
+<& Elements/EditPeople, Ticket => $Ticket, UserField => $UserField, UserString => $UserString, UserOp => $UserOp, GroupString => $GroupString, GroupOp => $GroupOp, GroupField => $GroupField &>
 </&>
 
 <br />
 
-<&| /Widgets/TitleBox, title => loc('Links') &>
+<&| /Widgets/TitleBox, title => loc('Links'), class=>'ticket-info-links' &>
 <& /Elements/EditLinks, Object => $Ticket, Merge => 1 &>
 </&>
 
@@ -102,17 +103,30 @@
 % if (my $TxnCFs = $Ticket->TransactionCustomFields) {
 %    while (my $CF = $TxnCFs->Next()) {
 <tr>
-<td class="label"><% $CF->Name %>:</td>
+<td class="label"><% loc($CF->Name) %>:</td>
 <td class="entry"><& /Elements/EditCustomField, 
     CustomField => $CF, 
     NamePrefix => "Object-RT::Transaction--CustomField-"
-    &><em><% $CF->FriendlyType %></em></td>
+    &><em><% $CF->FriendlyType %></em>
 </td></tr>
 %    } # end if while
 % } # end of if
+% if (exists $session{'Attachments'}) {
+<tr><td><&|/l&>Attached file</&>:</td>
+<td>
+<&|/l&>Check box to delete</&><br />
+% foreach my $attach_name (keys %{$session{'Attachments'}}) {
+<input type="checkbox" class="checkbox" name="DeleteAttach-<%$attach_name%>" value="1" /><%$attach_name%><br />
+% } # end of foreach
+</td>
+</tr>
+% } # end of if
+
   <tr>
     <td class="label"><&|/l&>Attach</&>:</td>
-    <td class="entry"><input name="UpdateAttachment" type="file" /></td>
+    <td class="entry"><input name="Attach" type="file" />
+    <input type="submit" class="button" name="AddMoreAttach" value="<&|/l&>Add More Files</&>" />
+    <input type="hidden" class="hidden" name="UpdateAttach" value="1" /></td>
   </tr>
   <tr>
     <td class="labeltop"><&|/l&>Content</&>:</td>
@@ -123,7 +137,8 @@
   
 
 <& /Elements/Submit, 
-    Label => loc('Save Changes'), 
+    Name    => 'SubmitTicket',
+    Label   => loc('Save Changes'), 
     Caption => loc("If you've updated anything above, be sure to"), color => "#333399" &>
 </form>
 
@@ -132,16 +147,53 @@
 
 
 my $Ticket = LoadTicket($id);
+my $CustomFields = $Ticket->CustomFields;
+
+# call this to show up hints of valid cf values.
+$m->comp(
+    '/Elements/ValidateCustomFields',
+    CustomFields => $CustomFields,
+    ARGSRef => {},
+);
 
 my $CanRespond = 0;
 
 $CanRespond = 1 if ( $Ticket->CurrentUserHasRight('ReplyToTicket') or
                      $Ticket->CurrentUserHasRight('ModifyTicket') ); 
 
-$m->comp('/Elements/Callback', TicketObj => $Ticket, ARGSRef => \%ARGS);
-my (@wresults, @results,  @dresults, @lresults, @cf_results);
+# {{{ deal with deleting uploaded attachments
+foreach my $key (keys %ARGS) {
+    if ($key =~ m/^DeleteAttach-(.+)$/) {
+        delete $session{'Attachments'}{$1};
+    }
+    $session{'Attachments'} = { %{$session{'Attachments'} || {}} };
+}
+# }}}
+# {{{ store the uploaded attachment in session
+if ($ARGS{'Attach'}) {            # attachment?
+    my $attachment = MakeMIMEEntity(
+        AttachmentFieldName => 'Attach'
+    );
 
-unless ($OnlySearchForPeople) {
+    my $file_path = Encode::decode_utf8("$ARGS{'Attach'}");
+    $session{'Attachments'} = {
+        %{$session{'Attachments'} || {}},
+        $file_path => $attachment,
+    };
+}
+# }}}
+
+# delete temporary storage entry to make WebUI clean
+unless (keys %{$session{'Attachments'}} and $ARGS{'UpdateAttach'}) {
+    delete $session{'Attachments'};
+}
+# }}}
+
+
+$m->callback( TicketObj => $Ticket, ARGSRef => \%ARGS );
+my @results;
+
+unless ($OnlySearchForPeople or $OnlySearchForGroup or $ARGS{'AddMoreAttach'} ) {
     # There might be two owners. 
     if ( ref ($ARGS{'Owner'} )) {
         my @owners =@{$ARGS{'Owner'}};
@@ -152,43 +204,21 @@ unless ($OnlySearchForPeople) {
 
     }
 
-    @wresults = ProcessTicketWatchers( TicketObj => $Ticket, ARGSRef => \%ARGS);
- @cf_results = ProcessObjectCustomFieldUpdates( Object => $Ticket, ARGSRef => \%ARGS);
-    @dresults = ProcessTicketDates( TicketObj => $Ticket, ARGSRef => \%ARGS);
-    @lresults = ProcessTicketLinks( TicketObj => $Ticket, ARGSRef => \%ARGS);
+    push @results, ProcessTicketWatchers( TicketObj => $Ticket, ARGSRef => \%ARGS);
+    push @results, ProcessObjectCustomFieldUpdates( Object => $Ticket, ARGSRef => \%ARGS);
+    push @results, ProcessTicketDates( TicketObj => $Ticket, ARGSRef => \%ARGS);
+    
+    # Add session attachments if any to be processed by ProcessUpdateMessage
+    $ARGS{'UpdateAttachments'} = $session{'Attachments'} if ( $session{'Attachments'} );
+    push @results, ProcessUpdateMessage( TicketObj => $Ticket, ARGSRef=>\%ARGS );
+    # Cleanup WebUI
+    delete $session{'Attachments'};
 
-    if ($ARGS{'UpdateAttachment'}) {
-        my $subject = "$ARGS{'UpdateAttachment'}";
-        # since CGI.pm deutf8izes the magic field, we need to add it back.
-        Encode::_utf8_on($subject);
-        # strip leading directories
-        $subject =~ s#^.*[\\/]##;
-
-        my $attachment = MakeMIMEEntity(
-           Subject             => $subject,
-           Body                => "",
-           AttachmentFieldName => 'UpdateAttachment'
-        );
-	delete $ARGS{'UpdateAttachment'};
-	$ARGS{'UpdateAttachments'}->{ $subject } = $attachment;
-    }
-
-    $ARGS{'UpdateContent'} =~ s/\r+\n/\n/g if $ARGS{'UpdateContent'};
-
-    if ($ARGS{'UpdateAttachments'} || ( $ARGS{'UpdateContent'} && $ARGS{'UpdateContent'} ne  "-- \n" . 
-				$session{'CurrentUser'}->UserObj->Signature)) {
-   	 ProcessUpdateMessage(TicketObj => $Ticket, ARGSRef=>\%ARGS, Actions=>\@results);
-	}
-    @results = ProcessTicketBasics( TicketObj => $Ticket, ARGSRef => \%ARGS);
+    push @results, ProcessTicketBasics( TicketObj => $Ticket, ARGSRef => \%ARGS );
+    push @results, ProcessTicketLinks( TicketObj => $Ticket, ARGSRef => \%ARGS);
 }
-push @results, @wresults;
-push @results, @dresults;
-push @results, @lresults;
-push @results, @cf_results;
 
-# undef so that TransactionBatch scrips run and update the ticket
-$Ticket = undef;
-$Ticket = LoadTicket($id);
+$Ticket->ApplyTransactionBatch;
 
 # If they've gone and moved the ticket to somewhere they can't see, etc...
 # TODO: display the results, even if we can't display the ticket.
@@ -204,9 +234,13 @@ unless ($Ticket->CurrentUserHasRight('ShowTicket')) {
 
 <%ARGS>
 $OnlySearchForPeople => undef
+$OnlySearchForGroup => undef
 $UserField => undef
 $UserOp => undef
 $UserString => undef
+$GroupString => undef
+$GroupOp => undef
+$GroupField => undef
 $id => undef
 </%ARGS>
 

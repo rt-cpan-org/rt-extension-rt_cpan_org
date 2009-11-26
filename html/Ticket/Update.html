@@ -1,8 +1,8 @@
 %# BEGIN BPS TAGGED BLOCK {{{
 %# 
 %# COPYRIGHT:
-%#  
-%# This software is Copyright (c) 1996-2007 Best Practical Solutions, LLC 
+%# 
+%# This software is Copyright (c) 1996-2009 Best Practical Solutions, LLC
 %#                                          <jesse@bestpractical.com>
 %# 
 %# (Except where explicitly superseded by other copyright notices)
@@ -49,63 +49,83 @@
 <& /Ticket/Elements/Tabs, 
     Ticket => $TicketObj, 
     Title=> $title &>
+    
+% $m->callback(CallbackName => 'BeforeActionList', ARGSRef => \%ARGS, Ticket => $TicketObj);
+<& /Elements/ListActions, actions => \@results &>
 
-<form action="Update.html" name="TicketUpdate" 
-	method="post" enctype="multipart/form-data">
-<& /Elements/Callback, _CallbackName => 'FormStart',ARGSRef =>\%ARGS &>
-<input type="hidden" class="hidden" name="QuoteTransaction" value="<% $ARGS{QuoteTransaction} %>" />
-<input type="hidden" class="hidden" name="DefaultStatus" value="<% $DefaultStatus %>" />
-<input type="hidden" class="hidden" name="Action" value="<% $ARGS{Action} %>" />
+<form action="Update.html" name="TicketUpdate"
+    method="post" enctype="multipart/form-data">
+% $m->callback( CallbackName => 'FormStart', ARGSRef => \%ARGS, Ticket => $TicketObj );
+<input type="hidden" class="hidden" name="QuoteTransaction" value="<% $ARGS{QuoteTransaction}||'' %>" />
+<input type="hidden" class="hidden" name="DefaultStatus" value="<% $DefaultStatus ||''%>" />
+<input type="hidden" class="hidden" name="Action" value="<% $ARGS{Action}||'' %>" />
+
+<& /Elements/GnuPG/SignEncryptWidget:ShowIssues, self => $gnupg_widget &>
+
 <table width="100%" border="0">
+% $m->callback(CallbackName => 'AfterTableOpens', ARGSRef => \%ARGS, Ticket => $TicketObj);
 
-<tr><td align="right"><&|/l&>Status</&>:</td>
+<tr><td class="label"><&|/l&>Status</&>:</td>
 <td>
 <& /Elements/SelectStatus, Name=>"Status", DefaultLabel => loc("[_1] (Unchanged)", loc($TicketObj->Status)), Default => $ARGS{'Status'} || ($TicketObj->Status eq $DefaultStatus ? undef : $DefaultStatus)&>
-<&|/l&>Owner</&>:  
-<& /Elements/SelectOwner, Name=>"Owner", DefaultLabel => loc("[_1] (Unchanged)", $TicketObj->OwnerObj->Name()), QueueObj => $TicketObj->QueueObj, TicketObj => $TicketObj, Default => $ARGS{'Owner'} &>
-<&|/l&>Worked</&>: <input size="4" name="UpdateTimeWorked" value="<% $ARGS{UpdateTimeWorked} %>" /> 
-<& /Elements/SelectTimeUnits, Name => 'UpdateTimeWorked'&>
+<span class="label"><&|/l&>Owner</&>:</span>
+<& /Elements/SelectOwner,
+    Name         => "Owner",
+    TicketObj    => $TicketObj,
+    QueueObj     => $TicketObj->QueueObj,
+    DefaultLabel => loc("[_1] (Unchanged)", $TicketObj->OwnerObj->Name),
+    Default      => $ARGS{'Owner'}
+&>
+<span class="label"><&|/l&>Worked</&>:</span>
+<& /Elements/EditTimeValue,
+    Name => 'UpdateTimeWorked',
+    Default => $ARGS{UpdateTimeWorked}||'',
+    InUnits => $ARGS{'UpdateTimeWorked-TimeUnits'}||'minutes',
+&>
 </td></tr>
 % my $skip;
-<& /Elements/Callback, _CallbackName => 'BeforeUpdateType', skip => \$skip, %ARGS &>
+% $m->callback( %ARGS, CallbackName => 'BeforeUpdateType', skip => \$skip );
 % if (!$skip) {
 <input type="hidden" class="hidden" name="id" value="<%$TicketObj->Id%>" /><br />
 % }
-<tr><td align="right"><&|/l&>Update Type</&>:</td>
+<tr><td class="label"><&|/l&>Update Type</&>:</td>
 <td><select name="UpdateType">
 % if ($CanRespond) {
-   <option value="response" <%$ARGS{'UpdateType'} eq "response" ? "SELECTED" : !$ARGS{'UpdateType'}&&$ResponseDefault%>><&|/l&>Reply to requestors</&></option>
+<option value="response" <% ($ARGS{'UpdateType'} && $ARGS{'UpdateType'} eq "response") ? qq[ selected="selected"] : !$ARGS{'UpdateType'}&&$ResponseDefault |n %>><&|/l&>Reply to requestors</&></option>
 % }
 </select> 
 </td></tr>
-<tr><td align="right"><&|/l&>Subject</&>:</td><td> <input name="UpdateSubject" size="60" value="<% $ARGS{UpdateSubject} || $TicketObj->Subject()%>" /></td></tr>
-<tr><td align="right"><&|/l&>Cc</&>:</td><td> <input name="UpdateCc" size="60"
-value="<%$ARGS{UpdateCc}||""%>" /><br />
-<i><font size="-2">
-<&|/l&>(Sends a carbon-copy of this update to a comma-delimited list of email addresses. Does <strong>not</strong> change who will receive future updates.)</&></font></i>
-</td></tr>
-<tr><td align="right"><&|/l&>Bcc</&>:</td><td> <input name="UpdateBcc" size="60" value="<%$ARGS{UpdateBcc}||""%>" /><br />
-<i><font size="-2">
-<&|/l&>(Sends a blind carbon-copy of this update to a comma-delimited list of email addresses. Does <strong>not</strong> change who will receive future updates.)</&></font></i>
-</td></tr>
+<tr><td class="label"><&|/l&>Subject</&>:</td><td> <input name="UpdateSubject" size="60" value="<% $ARGS{UpdateSubject} || $TicketObj->Subject()%>" /></td></tr>
+
+<& /Ticket/Elements/UpdateCc, %ARGS, TicketObj => $TicketObj &>
+
+<& /Ticket/Elements/EditTransactionCustomFields, %ARGS, TicketObj => $TicketObj &>
+
 % if (exists $session{'Attachments'}) {
+<tr><td><&|/l&>Attached file</&>:</td>
 <td>
-<&|/l&>Attached file</&>:
-</td>
-<td colspan="5">
 <&|/l&>Check box to delete</&><br />
 % foreach my $attach_name (keys %{$session{'Attachments'}}) {
 <input type="checkbox" class="checkbox" name="DeleteAttach-<%$attach_name%>" value="1" /><%$attach_name%><br />
 % } # end of foreach
 </td>
 </tr>
-<tr>
 % } # end of if
 
-<tr><td align="right"><&|/l&>Attach</&>:</td><td><input name="Attach" type="file" /><input type="submit" class="button" name="AddMoreAttach" value="<&|/l&>Add More Files</&>" /><input type="hidden" class="hidden" name="UpdateAttach" value="1" />
+<tr><td class="label"><&|/l&>Attach</&>:</td><td><input name="Attach" type="file" /><input type="submit" class="button" name="AddMoreAttach" value="<&|/l&>Add More Files</&>" /><input type="hidden" class="hidden" name="UpdateAttach" value="1" />
 </td></tr>
-<tr><td align="right" valign="top"><&|/l&>Message</&>:</td><td>
-<& /Elements/Callback, _CallbackName => 'BeforeMessageBox', %ARGS &>
+
+% if ( $gnupg_widget ) {
+<tr><td>&nbsp;</td><td>
+<& /Elements/GnuPG/SignEncryptWidget,
+    self => $gnupg_widget,
+    TicketObj => $TicketObj,
+&>
+</td></tr>
+% }
+
+<tr><td class="label" valign="top"><&|/l&>Message</&>:</td><td>
+% $m->callback( %ARGS, CallbackName => 'BeforeMessageBox' );
 % if (exists $ARGS{UpdateContent}) {
 % # preserve QuoteTransaction so we can use it to set up sane references/in/reply to
 % my $temp = $ARGS{'QuoteTransaction'};
@@ -123,21 +143,29 @@ value="<%$ARGS{UpdateCc}||""%>" /><br />
 
 <& /Elements/Submit, Label => loc('Update Ticket'), Name => 'SubmitTicket' &>
 % if ($TicketObj->CurrentUserHasRight('ShowOutgoingEmail')) {
+<&|/Widgets/TitleBox, title => loc('Scrips and Recipients') &>
 <& /Ticket/Elements/PreviewScrips, TicketObj => $TicketObj, %ARGS &>
+</&>
+
 % }
 </form>
 <%INIT>
 my $CanRespond = 0;
+my $checks_failure = 0;
 my $title;
 
 my $TicketObj = LoadTicket($id);
+
+my @results;
+
+$m->callback( Ticket => $TicketObj, ARGSRef => \%ARGS, results => \@results, CallbackName => 'Initial' );
 
 unless($DefaultStatus){
     $DefaultStatus=($ARGS{'Status'} ||$TicketObj->Status());
 }
 
-if ($DefaultStatus =~ '^new$'){
-        $DefaultStatus='open';
+if ($DefaultStatus eq 'new'){
+    $DefaultStatus='open';
 }
 
 if ($DefaultStatus eq 'resolved') {
@@ -149,7 +177,8 @@ if ($DefaultStatus eq 'resolved') {
 # Things needed in the template - we'll do the processing here, just
 # for the convenience:
 
-my $ResponseDefault = "SELECTED";
+my $ResponseDefault = qq[ selected="selected"];
+
 
 
 $CanRespond = 1 if ( $TicketObj->CurrentUserHasRight('ReplyToTicket') or
@@ -158,30 +187,23 @@ $CanRespond = 1 if ( $TicketObj->CurrentUserHasRight('ReplyToTicket') or
 # {{{ deal with deleting uploaded attachments
 foreach my $key (keys %ARGS) {
     if ($key =~ m/^DeleteAttach-(.+)$/) {
-	delete $session{'Attachments'}{$1};
+        delete $session{'Attachments'}{$1};
     }
     $session{'Attachments'} = { %{$session{'Attachments'} || {}} };
 }
 # }}}
 
 # {{{ store the uploaded attachment in session
-if ($ARGS{'Attach'}) {			# attachment?
-    $session{'Attachments'} = {} unless defined $session{'Attachments'};
-
-    my $subject = "$ARGS{'Attach'}";
-    # since CGI.pm deutf8izes the magic field, we need to add it back.
-    Encode::_utf8_on($subject);
-    # strip leading directories
-    $subject =~ s#^.*[\\/]##;
-
+if ($ARGS{'Attach'}) {            # attachment?
     my $attachment = MakeMIMEEntity(
-        Filename             => $subject,
-        Body                => "",
         AttachmentFieldName => 'Attach'
     );
 
-    $session{'Attachments'} = { %{$session{'Attachments'} || {}},
-				$ARGS{'Attach'} => $attachment };
+    my $file_path = Encode::decode_utf8("$ARGS{'Attach'}");
+    $session{'Attachments'} = {
+        %{$session{'Attachments'} || {}},
+        $file_path => $attachment,
+    };
 }
 # }}}
 
@@ -191,11 +213,38 @@ unless (keys %{$session{'Attachments'}} and $ARGS{'UpdateAttach'}) {
 }
 # }}}
 
-if ( exists $ARGS{SubmitTicket} ) {
-    $m->comp('Display.html', TicketObj => $TicketObj, %ARGS);
-    return;
+my $gnupg_widget = $m->comp('/Elements/GnuPG/SignEncryptWidget:new', Arguments => \%ARGS );
+$m->comp( '/Elements/GnuPG/SignEncryptWidget:Process',
+    self => $gnupg_widget,
+    TicketObj => $TicketObj,
+);
+
+if ( $ARGS{'SubmitTicket'} ) {
+    my $CFs = $TicketObj->TransactionCustomFields;
+    my $ValidCFs = $m->comp(
+        '/Elements/ValidateCustomFields',
+        CustomFields => $CFs,
+        NamePrefix => "Object-RT::Transaction--CustomField-",
+        ARGSRef => \%ARGS
+    );
+    unless ( $ValidCFs ) {
+        $checks_failure = 1;
+        while (my $CF = $CFs->Next) {
+            my $msg = $m->notes('InvalidField-' . $CF->Id) or next;
+            push @results, loc($CF->Name) . ': ' . $msg;
+        }
+    }
+    my $status = $m->comp('/Elements/GnuPG/SignEncryptWidget:Check',
+        self      => $gnupg_widget,
+        TicketObj => $TicketObj,
+    );
+    $checks_failure = 1 unless $status;
 }
 
+if ( !$checks_failure && exists $ARGS{SubmitTicket} ) {
+    $m->callback( Ticket => $TicketObj, ARGSRef => \%ARGS, CallbackName => 'BeforeDisplay' );
+    return $m->comp('Display.html', TicketObj => $TicketObj, %ARGS);
+}
 </%INIT>
 
 <%ARGS>
