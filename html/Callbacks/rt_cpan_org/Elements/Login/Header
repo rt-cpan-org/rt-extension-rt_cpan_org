@@ -1,0 +1,14 @@
+<%ARGS>
+$nossl => undef
+</%ARGS>
+<%INIT>
+# check if we are in HTTPS mode
+if ( not defined $nossl
+    and not defined $ENV{'HTTP_X_FORWARDED_HOST'}
+    and ($ENV{'HTTPS'}||'') ne 'on'
+) {
+    $m->redirect(
+        'https://'. RT->Config->Get('WebDomain') . $ENV{REQUEST_URI}
+    );
+}
+</%INIT>
