@@ -1,0 +1,24 @@
+<%ARGS>
+$topactions => {}
+$toptabs => {}
+</%ARGS>
+<%INIT>
+
+$topactions->{'0'} = {
+    html => $m->scomp('/Elements/ContactInfo'),
+};
+
+my @hide = map loc($_), 'Simple Search', 'Tools', 'Approval';
+foreach my $k ( keys %$toptabs ) {
+    my $title = $toptabs->{ $k }{'title'};
+    next unless grep $title eq $_, @hide;
+    delete $toptabs->{ $k };
+}
+
+foreach my $k ( keys %$toptabs ) {
+    next unless $toptabs->{ $k }{'title'} eq loc('Tickets');
+
+    $toptabs->{ $k }{'title'} = loc('Search Tickets');
+    last;
+}
+</%INIT>
