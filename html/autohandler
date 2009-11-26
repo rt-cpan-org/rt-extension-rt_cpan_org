@@ -47,14 +47,6 @@
 %# END BPS TAGGED BLOCK }}}
 <%INIT>
 
-# TODO: change is if there better way to check http vs. https
-if ( ($ENV{'SERVER_PORT'}||0) == 443 || ($ENV{HTTPS}||'') eq 'on' ) {
-    s/^http:/https:/ for $RT::WebURL, $RT::WebBaseURL;
-}
-else {
-    s/^https:/http:/ for $RT::WebURL, $RT::WebBaseURL;
-}
-
 # Roll back any dangling transactions from a previous failed connection
 $RT::Handle->ForceRollback() if $RT::Handle->TransactionDepth;
 
