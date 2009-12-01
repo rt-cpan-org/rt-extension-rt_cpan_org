@@ -46,19 +46,44 @@
 # 
 # END BPS TAGGED BLOCK }}}
 
+use 5.008003;
+use strict;
+use warnings;
+
 package RT::Extension::rt_cpan_org;
 
-use v5.8.3;
 our $VERSION = '0.02';
-
-1;
 
 =head1 NAME
 
 RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT for rt.cpan.org
+
+=head1 DESCRIPTION
+
+=head1 OVERLAYS AND CUSTOMIZATIONS
+
+=head2 autohandler
+
+=over 4
+
+=item * C<$goto> argument
+
+=item * C<$nossl> argument and redirect to https in some
+cases
+
+=item * rewriting Web* options depending on schema (http/https)
+
+=item * XXX: old code was disabling everything related to
+SelfService. Not sure why. Should be checked.
+
+=back
+
+=cut
 
 =head1 AUTHOR
 
 Thomas Sibley E<lt>trs@bestpractical.comE<gt>
 
 =cut
+
+1;
