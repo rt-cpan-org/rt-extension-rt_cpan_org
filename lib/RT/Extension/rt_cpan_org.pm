@@ -80,6 +80,24 @@ SelfService. Not sure why. Should be checked.
 
 =cut
 
+require RT::Interface::Web;
+package RT::Interface::Web;
+
+no warnings 'redefine';
+sub ShowRequestedPage {
+    my $ARGS = shift;
+
+    my $m = $HTML::Mason::Commands::m;
+
+    SendSessionCookie();
+
+    return $m->comp(
+        { base_comp => $m->request_comp },
+        $m->fetch_next,
+        %$ARGS
+    );
+}
+
 =head1 AUTHOR
 
 Thomas Sibley E<lt>trs@bestpractical.comE<gt>
