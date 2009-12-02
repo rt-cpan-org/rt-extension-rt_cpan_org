@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-@import url(<% $RT::WebPath %>/NoAuth/css/3.5-default/main.css);
+@import url(<% $RT::WebPath %>/NoAuth/css/web2/main.css);
 
 body { background-color: white; }
 
@@ -75,6 +75,8 @@ body { background-color: white; }
     background: #ffffa3;
     padding: 0.5em;
 }
+
+.dist-list { width: 100%; overflow: hidden; }
 
 .dist-list ul {
     list-style: none;
