@@ -49,6 +49,11 @@
 
 body { background-color: white; }
 
+#comp-Public-RT-CPAN-About #body {
+    margin-left: 12em;
+    margin-right: 12em;
+}
+
 .ticket-transaction .messagebody {
     /*white-space: pre;*/
     font-family: "Andale Mono", monospace;
