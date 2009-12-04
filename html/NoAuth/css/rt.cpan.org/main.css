@@ -107,3 +107,21 @@ tt {
 .contact-info {
     text-align: right;
 }
+
+* html .clearfix {
+    height: 1%; /* IE5-6 */
+}
+.clearfix {
+    display: inline-block; /* IE7xhtml*/
+}
+html[xmlns] .clearfix { /* O */
+    display: block;  
+}
+.clearfix:after { /* FF, O, etc. */
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
