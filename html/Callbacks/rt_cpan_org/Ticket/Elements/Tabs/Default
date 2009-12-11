@@ -9,14 +9,14 @@ return unless $Ticket;
 
 my $loc_comment = loc('Comment');
 foreach my $k ( keys %$actions ) {
-    next unless $actions->{$k}{'title'} eq $loc_comment;
+    next unless ($actions->{$k}{'title'}||'') eq $loc_comment;
 
     delete $actions->{$k};
 }
 
 my $loc_resolve = loc('Resolve');
 foreach my $k ( keys %$actions ) {
-    next unless $actions->{$k}{'title'} eq $loc_resolve;
+    next unless ($actions->{$k}{'title'}||'') eq $loc_resolve;
 
     $actions->{$k}{'path'} =~ s{\bAction=Comment\b}{Action=Respond};
 }
