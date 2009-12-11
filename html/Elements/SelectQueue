@@ -48,7 +48,8 @@
 % if ($Lite) {
 %     my $d = new RT::Queue($session{'CurrentUser'});
 %     $d->Load($Default);
-<input name="<% defined $Name? $Name : '' %>" size="25" value="<% $d->Name %>" />
+%     my $dname = $d->Name; $dname = '' unless defined $dname;
+<input name="<% $Name %>" size="25" value="<% $dname %>" />
 % }
 % else {
 <select name="<%$Name%>">
