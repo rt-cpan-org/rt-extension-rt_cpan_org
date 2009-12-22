@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-@import url(<% $RT::WebPath %>/NoAuth/css/3.5-default/main.css);
+@import url(../3.5-default/main.css);
 
 body { background-color: white; }
 
