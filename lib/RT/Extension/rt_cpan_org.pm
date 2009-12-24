@@ -80,6 +80,15 @@ SelfService. Not sure why. Should be checked.
 
 =cut
 
+# there is no sense in overriding default queue for rt.cpan.org
+require RT::Config;
+$RT::Config::META{'DefaultQueue'}{'Overridable'} = 0;
+$RT::Config::META{'UsernameFormat'}{'Overridable'} = 0;
+
+$RT::Config::META{'WebDefaultStylesheet'}{'WidgetArguments'}{'Values'} = [
+    qw(rt.cpan.org-web2 rt.cpan.org-3.5 rt.cpan.org-3.4)
+];
+
 require RT::Interface::Web;
 package RT::Interface::Web;
 
