@@ -22,9 +22,13 @@ html/Elements/QueueSummary
 html/Elements/Quicksearch
 html/Elements/SelectOwner
 html/Elements/SelectQueue
+html/NoAuth/css/rt.cpan.org-3.4/main.css
+html/NoAuth/css/rt.cpan.org-3.5/main.css
+html/NoAuth/css/rt.cpan.org-web2/main.css
 html/NoAuth/css/rt.cpan.org/main.css
 html/NoAuth/dhandler
 html/NoAuth/images/cpan-cake.jpg
+html/NoAuth/images/cpan-rt-3.8.jpg
 html/NoAuth/images/cpan.jpg
 html/Prefs/Quicksearch.html
 html/Public/bugs-per-dist.tsv
