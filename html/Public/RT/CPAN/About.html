@@ -12,6 +12,30 @@
 
     <p>Quick usage guidelines you can find on <a href="<% $RT::WebPath %>/">the main page</a></p>
 
+    <h2>Recommendations (soft rules)</h2>
+    <h3>For reporters</h3>
+
+    <h4>Be polite</h4>
+
+    <h4>Are maintainers required to act on all bugs reported by end users?</h4>
+    <p>No. They are not. Unless you have an outside contractural relationship with
+    a maintainer, you need to assume that they are a volunteer. Telling them they
+    "must" do something is impolite and counterproductive.</p>
+    
+    <h4>Should maintainers accept bug reports against older versions of a module?</h4>
+    <p>In general, we discourage bug reports against older versions of modules other
+    than for historical reporting purposes (ie close immediately upon report with a
+    note that it's been tested and found to work in the current version.)</p>
+    <p>If a bug exists in the current CPAN version of a module, please do report the bug.</p>
+    
+    <h3>For authors and maintainers</h3>
+
+    <h4>Be polite</h4>
+
+    <h4>Can a module has own bug tracker?</h4>
+    <p>Sure it can, but queue wouldn't be disabled and users still would be
+    able to create tickets on rt.cpan.org.</p>
+
     <h2>What is used to power this service?</h2>
     <p>All parts used to build this service are open source software.
     The core is the <a href="http://www.bestpractical.com/rt/">Request Tracker</a> project
@@ -19,7 +43,7 @@
     project or module from the CPAN.</p>
 
     <p>rt.cpan.org has some customizations which tie it to particular RT version, at this
-    moment (2009-05) it's RT 3.6.HEAD.</p>
+    moment (2009-12) it's RT 3.8.HEAD.</p>
 
     <p>You can start from checking out from the repository:<br />
     <pre>    svn co svn://svn.bestpractical.com/RT-Extension-rt_cpan_org</pre><br />
