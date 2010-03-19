@@ -17,7 +17,7 @@ $dbh->{RaiseError} = 1;
 
 my $query = q{
     SELECT q.Name, t.Status, count(1)
-    FROM Tickets t, Queues q
+    FROM Queues q STRAIGHT_JOIN Tickets t 
     WHERE
         t.Queue = q.id
         AND t.Type = ?
