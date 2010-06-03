@@ -12,14 +12,16 @@ sub skip($);
 
 my $perl = $ENV{'PERL'} = '/home/rtcpan/perl/bin/perl';
 
-my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt3";
+my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt38";
 
 my $rt_opts =
      " --prefix=$root"
     ." --with-db-type=mysql"
     ." --with-db-host=''" # connect via socket
     ." --with-db-port=3307"
-    ." --with-db-database=rt_cpan_org"
+    ." --with-db-database=rt_cpan_org_38"
+    ." --disable-gpg"
+    ." --with-web-handler=fastcgi-server"
     ." --with-web-user=rtcpan"
     ." --with-web-group=rtcpan";
 
@@ -36,6 +38,7 @@ my @UPDATE = qw{
     RT-Extension-QuickDelete
     RT-Extension-ReportSpam
     RT-Authen-OpenID
+    RT-Extension-Utils
     CPAN2RT
 };
 
@@ -50,6 +53,7 @@ my %REPOS = (
     'RT-Extension-QuickDelete' => 'svn://svn.bestpractical.com/RT-Extension-QuickDelete/',
     'RT-Extension-rt_cpan_org' => 'svn://svn.bestpractical.com/RT-Extension-rt_cpan_org/',
     'RT-Extension-ReportSpam'  => 'svn://svn.bestpractical.com/RT-Extension-ReportSpam/',
+    'RT-Extension-Utils'       => 'git://github.com/bestpractical/rt-extension-utils.git',
 );
 
 my $tmp_dir = tempdir( CLEAN => 1 )
@@ -61,7 +65,7 @@ unless ( skip 'RT' ) {
     my $repo = 'git://github.com/bestpractical/rt.git';
     ($_ = `git clone $repo`)
         or !$? or die "$_\n\nCouldn't export repo";
-    ($_ = `cd rt && git checkout origin/3.6-trunk && sh ./configure.ac $rt_opts && sudo make upgrade`)
+    ($_ = `cd rt && git checkout origin/3.8-trunk && sh ./configure.ac $rt_opts && sudo make install`)
         or !$? or die "$_\n\nCouldn't upgrade RT";
 }
 
@@ -89,12 +93,17 @@ foreach my $module (@UPDATE) {
 }
 
 # adjust bugs-per-dist.data and queue-addresses
-foreach my $path (qw(/local/html/Public/bugs-per-dist.data /local/html/NoAuth/cpan)) {
+foreach my $path (qw(/local/plugins/RT-Extension-rt_cpan_org/html/Public/bugs-per-dist.data /local/plugins/RT-Extension-rt_cpan_org/html/NoAuth/cpan)) {
     my $f = $root . $path;
     `touch $f` unless -e $f;
     ($_ = `chown -R rtcpan:rtcpan $f`)
         or !$? or die "$_\n\nCouldn't change owner of '$f'";
 }
+
+# clean mason cache
+($_ = `rm -fr $root/var/mason_data/obj/`)
+    or !$? or die "$_\n\nCouldn't clean mason cache";
+
 
 exit 0;
 
