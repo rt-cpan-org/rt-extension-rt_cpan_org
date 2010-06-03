@@ -111,6 +111,10 @@ sub ShowRequestedPage {
 
 Thomas Sibley E<lt>trs@bestpractical.comE<gt>
 
+=head1 LICENSE
+
+GPL version 2.
+
 =cut
 
 1;
