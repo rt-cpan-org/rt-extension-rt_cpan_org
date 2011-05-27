@@ -61,7 +61,7 @@
 <td><a href="<% $RT::WebPath%>/Dist/Display.html?Status=Active&Queue=<% $queue->{Name} |u %>"><% $queue->{Name} %></a></td>
 %   for my $condition (@$conditions) {
 %       $Tickets->FromSQL( "Queue = $queue->{id} AND ". $condition->{cond} );
-<td align="right"><a href="<% $RT::WebPath%>/Dist/Display.html?Status=<% $condition->{name} |u %>&Queue=<% $queue->{Name} |u %>"><% $Tickets->Count %></a></td>
+<td align="right"><a href="<% $RT::WebPath%>/Dist/Display.html?Status=<% $condition->{status} |u %>&Queue=<% $queue->{Name} |u %>"><% $Tickets->Count %></a></td>
 %   }
 </tr>
 % }

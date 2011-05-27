@@ -51,9 +51,9 @@
 <& /Elements/QueueSummary,
    cache => 'quick_search_queues',
    queue_filter => sub { $_->CurrentUserHasRight('ShowTicket') && !exists $unwanted->{$_->Name} },
-   conditions => [ {cond => "Status = 'new'",  name => loc ('new')  },
-		   {cond => "Status = 'open'", name => loc ('open') },
-		   {cond => "Status = 'stalled'", name => loc ('stalled') }] &>
+   conditions => [ {cond => "Status = 'new'",  name => loc ('new'), status => 'new'  },
+		   {cond => "Status = 'open'", name => loc ('open'), status => 'open' },
+		   {cond => "Status = 'stalled'", name => loc ('stalled'), status => 'stalled' }] &>
 </&>
 </div>
 <%INIT>
