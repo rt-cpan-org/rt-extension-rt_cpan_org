@@ -4,6 +4,7 @@ $nossl => undef
 <%INIT>
 # check if we are in HTTPS mode
 if ( not defined $nossl
+    and RT->Config->Get('WebDomain') ne 'localhost'
     and not defined $ENV{'HTTP_X_FORWARDED_HOST'}
     and ($ENV{'HTTPS'}||'') ne 'on'
 ) {
