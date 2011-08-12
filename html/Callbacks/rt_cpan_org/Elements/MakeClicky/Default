@@ -1,0 +1,14 @@
+<%ARGS>
+$types => []
+$actions => {}
+$handle => undef
+</%ARGS>
+<%INIT>
+$actions->{url_overwrite} = sub {
+    my %args = @_;
+    my $result = qq{<a target="new" rel="nofollow" href="$args{'value'}">};
+    $args{'value'} =~ s/(\S{30})/$1 /g;
+    $result .= qq{$args{'value'}</a>};
+    return qq{<span class="clickylink">$result</span>};
+};
+</%INIT>
