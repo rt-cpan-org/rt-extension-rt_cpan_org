@@ -34,7 +34,7 @@ my @statuses = qw(new open stalled resolved rejected);
 
 my $date = `date`;
 chomp $date;
-print "# Generated on date\n";
+print "# Generated on $date\n";
 print "# ", join("\t", "dist", @statuses), "\n";
 
 my %buffer = ('dist' => '');
