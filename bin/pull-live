@@ -44,15 +44,15 @@ my @UPDATE = qw{
 
 my %REPOS = (
     'CPAN2RT'                  => 'git://github.com/bestpractical/cpan2rt.git',
-    'RT-Authen-Bitcard'        => 'svn://svn.bestpractical.com/RT-Authen-Bitcard/',
-    'RT-Authen-OpenID'         => 'svn://svn.bestpractical.com/RT-Authen-OpenID/',
-    'RT-Authen-PAUSE'          => 'svn://svn.bestpractical.com/RT-Authen-PAUSE/',
+    'RT-Authen-Bitcard'        => 'git://github.com/bestpractical/rt-authen-bitcard.git',
+    'RT-Authen-OpenID'         => 'git://github.com/bestpractical/rt-authen-openid.git',
+    'RT-Authen-PAUSE'          => 'git://github.com/bestpractical/rt-authen-pause.git',
     'RT-BugTracker'            => 'git://github.com/bestpractical/rt-bugtracker.git',
     'RT-BugTracker-Public'     => 'git://github.com/bestpractical/rt-bugtracker-public.git',
     'RT-Extension-MergeUsers'  => 'git://github.com/bestpractical/rt-extension-mergeusers.git',
     'RT-Extension-QuickDelete' => 'git://github.com/bestpractical/rt-extension-quickdelete.git',
     'RT-Extension-rt_cpan_org' => 'git://github.com/bestpractical/rt-extension-rt_cpan_org.git',
-    'RT-Extension-ReportSpam'  => 'svn://svn.bestpractical.com/RT-Extension-ReportSpam/',
+    'RT-Extension-ReportSpam'  => 'git://github.com/bestpractical/rt-extension-reportspam.git',
     'RT-Extension-Utils'       => 'git://github.com/bestpractical/rt-extension-utils.git',
 );
 
