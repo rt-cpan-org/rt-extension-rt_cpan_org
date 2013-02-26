@@ -61,6 +61,7 @@ RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT for rt.
 =cut
 
 RT->AddStyleSheets("rt.cpan.org.css");
+RT->AddJavaScript("rt.cpan.org.js");
 
 require RT::Config;
 
