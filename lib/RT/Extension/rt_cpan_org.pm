@@ -58,26 +58,6 @@ our $VERSION = '4.0';
 
 RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT for rt.cpan.org
 
-=head1 DESCRIPTION
-
-=head1 OVERLAYS AND CUSTOMIZATIONS
-
-=head2 autohandler
-
-=over 4
-
-=item * C<$goto> argument
-
-=item * C<$nossl> argument and redirect to https in some
-cases
-
-=item * rewriting Web* options depending on schema (http/https)
-
-=item * XXX: old code was disabling everything related to
-SelfService. Not sure why. Should be checked.
-
-=back
-
 =cut
 
 require RT::Config;
