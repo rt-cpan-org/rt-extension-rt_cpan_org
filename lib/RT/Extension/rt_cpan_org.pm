@@ -60,6 +60,8 @@ RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT for rt.
 
 =cut
 
+RT->AddStyleSheets("rt.cpan.org.css");
+
 require RT::Config;
 
 # There is no sense in overriding default queue for rt.cpan.org
@@ -67,11 +69,6 @@ $RT::Config::META{'DefaultQueue'}{'Overridable'} = 0;
 
 # We provide a custom username format; others are not useful.
 $RT::Config::META{'UsernameFormat'}{'Overridable'} = 0;
-
-# Add rt.cpan.org variants of supplied styles.
-$RT::Config::META{'WebDefaultStylesheet'}{'WidgetArguments'}{'Values'} = [
-    qw(rt.cpan.org-web2 rt.cpan.org-3.5 rt.cpan.org-3.4)
-];
 
 require RT::Interface::Web;
 package RT::Interface::Web;
