@@ -100,6 +100,9 @@ sub ShowRequestedPage {
 
     SendSessionCookie();
 
+    # precache all system level rights for the current user
+    $HTML::Mason::Commands::session{CurrentUser}->PrincipalObj->HasRights( Object => RT->System );
+
     return $m->comp(
         { base_comp => $m->request_comp },
         $m->fetch_next,
