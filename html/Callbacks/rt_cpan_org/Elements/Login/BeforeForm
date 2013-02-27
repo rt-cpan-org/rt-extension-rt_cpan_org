@@ -57,7 +57,7 @@
 
     <h2>... find a distribution and browse its bugs?</h2>
     <p>
-      This site lets you <a href="<% $RT::WebPath %>/Public/">search
+      This site lets you <a href="<% RT->Config->Get("WebPath") %>/Public/">search
       for distributions</a> by name or author.  When you've found the
       distribution you're looking for, you can browse known bugs and
       report new bugs.
@@ -75,7 +75,7 @@
       to <strong>bug-&lt;distribution-name&gt;@rt.cpan.org</strong>, where
       "&lt;distribution-name&gt;" is something like DBIx-SearchBuilder or
       Class-DBI or Acme-Current-Forever. Use
-      <a href="<% $RT::WebPath %>/Public/">search</a> to find name of
+      <a href="<% RT->Config->Get("WebPath") %>/Public/">search</a> to find name of
       a distribution.
     </p>
 
@@ -96,7 +96,7 @@
 
     <h2>... know more about this service?</h2>
     <p>
-      Read <a href="<% $RT::WebPath %>/Public/RT/CPAN/About.html">this document</a>.
+      Read <a href="<% RT->Config->Get("WebPath") %>/Public/RT/CPAN/About.html">this document</a>.
     </p>
 
     <p>

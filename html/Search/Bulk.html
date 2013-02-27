@@ -56,7 +56,7 @@
     Order => $Order &>
 
 <& /Elements/ListActions, actions => \@results &>
-<form method="post" action="<%$RT::WebPath%>/Search/Bulk.html" enctype="multipart/form-data">
+<form method="post" action="<%RT->Config->Get("WebPath")%>/Search/Bulk.html" enctype="multipart/form-data">
 % foreach my $var qw(Query Format OrderBy Order Rows Page) {
 <input type="hidden" class="hidden" name="<%$var%>" value="<%$ARGS{$var}%>" />
 %}
@@ -69,7 +69,7 @@
     Order => $Order,
     Rows => $Rows,
     Page => $Page,
-    BaseURL => $RT::WebPath."/Search/Bulk.html?"
+    BaseURL => RT->Config->Get("WebPath")."/Search/Bulk.html?"
    &>
 
 <hr>
@@ -179,7 +179,7 @@ $cfs->LimitToQueue($_) for keys %$seen_queues;
 <td><& /Elements/EditCustomFieldText, @add &></td>
 <td>&nbsp;</td>
 % } else {
-%   $RT::Logger->crit("Unknown CustomField type: " . $cf->Type);
+%   RT->Logger->crit("Unknown CustomField type: " . $cf->Type);
 % }
 </tr>
 % }
@@ -207,7 +207,7 @@ my (@results);
 
 $Page ||= 1;
 
-$Format ||= $RT::DefaultSearchResultFormat;
+$Format ||= RT->Config->Get("DefaultSearchResultFormat");
 
 # inject _CHECKBOX to the first field.
 $Format =~ s/'?([^']+)'?,/'___CHECKBOX__$1',/;
@@ -326,7 +326,7 @@ while ( my $Ticket = $Tickets->Next ) {
             $op = 'del';
         }
         else {
-            $RT::Logger->crit(
+            RT->Logger->crit(
                 "Got an op that was neither add nor delete. can never happen"
                   . $list->[0] );
             last;

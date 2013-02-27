@@ -1,1 +1,1 @@
-| <a href="<%$RT::WebPath%>/Public/RT/CPAN/About.html"><&|/l&>About rt.cpan.org</&></a>
+| <a href="<%RT->Config->Get("WebPath")%>/Public/RT/CPAN/About.html"><&|/l&>About rt.cpan.org</&></a>

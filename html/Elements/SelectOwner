@@ -98,13 +98,13 @@ if (not $Lite) {
                              IncludeSuperusers      => 0);
 
         while (my $User = $Users->Next) {
-            next if ($User->id == $RT::Nobody->id); # skip nobody here, so we can make them first later
+            next if ($User->id == RT->Nobody->id); # skip nobody here, so we can make them first later
             $user_uniq_hash{$User->Id()} = $User;
         }
     }
 
     @users = sort { uc($a->Name) cmp uc($b->Name) } values %user_uniq_hash; 
-    unshift @users, $RT::Nobody;
+    unshift @users, RT->Nobody;
 }
 </%INIT>
 
