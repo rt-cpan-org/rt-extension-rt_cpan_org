@@ -3,11 +3,12 @@ abstract: 'The customizations that turn a RT into a RT for rt.cpan.org'
 author:
   - 'Thomas Sibley <trs@bestpractical.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.59
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.59
 distribution_type: module
-generated_by: 'Module::Install version 0.97'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.06'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -22,4 +23,4 @@ requires:
   perl: 5.8.3
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 0.03
+version: 4.0

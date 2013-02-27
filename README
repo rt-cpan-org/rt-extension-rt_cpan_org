@@ -2,18 +2,6 @@ NAME
     RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT
     for rt.cpan.org
 
-DESCRIPTION
-OVERLAYS AND CUSTOMIZATIONS
-  autohandler
-    *   $goto argument
-
-    *   $nossl argument and redirect to https in some cases
-
-    *   rewriting Web* options depending on schema (http/https)
-
-    *   XXX: old code was disabling everything related to SelfService. Not
-        sure why. Should be checked.
-
 AUTHOR
     Thomas Sibley <trs@bestpractical.com>
 
