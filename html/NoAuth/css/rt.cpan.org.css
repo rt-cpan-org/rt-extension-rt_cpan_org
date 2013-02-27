@@ -106,3 +106,8 @@ tt {
 }
 
 a { text-decoration: underline; }
+
+/* Let me count the ways to name "Quicksearch"... */
+.ticket-overview .titlebox-title .right {
+    display: none;
+}
