@@ -2,4 +2,10 @@
 if (my $actions = PageMenu->child("actions")) {
     $actions->delete("comment");
 }
+
+Menu->child(
+    "about",
+    title   => loc("About rt.cpan.org"),
+    path    => "/Public/RT/CPAN/About.html",
+);
 </%init>
