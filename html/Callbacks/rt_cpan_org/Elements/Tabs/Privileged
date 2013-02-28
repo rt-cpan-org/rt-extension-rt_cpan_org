@@ -1,4 +1,6 @@
 <%init>
+use utf8;
+
 if (my $actions = PageMenu->child("actions")) {
     $actions->delete("comment");
 }
@@ -6,9 +8,19 @@ if (my $actions = PageMenu->child("actions")) {
 Menu->child("search")->title(loc("Search Tickets"));
 Menu->delete("tools");
 
-Menu->child(
+my $about = Menu->child(
     "about",
     title   => loc("About rt.cpan.org"),
+    path    => "/NoAuth/RT/CPAN/About.html",
+);
+$about->child(
+    "usage",
+    title   => loc("How do I…?"),
+    path    => "/NoAuth/RT/CPAN/Usage.html",
+);
+$about->child(
+    "about",
+    title   => loc("About"),
     path    => "/NoAuth/RT/CPAN/About.html",
 );
 </%init>

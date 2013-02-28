@@ -1,6 +1,10 @@
 <& /Elements/Header, Title => loc('About rt.cpan.org'), RichText => 0 &>
-
+% if ($session{CurrentUser} and $session{CurrentUser}->id) {
+<& /Elements/Tabs &>
+% } else {
 <div id="body">
+% }
+
   <div id="rtcpan-about">
  
     <h2 style="margin-top: 0">What is this all about?</h2>
