@@ -112,3 +112,5 @@ tt {
 #contact-info a { color: white }
 
 a { text-decoration: underline; }
+
+#user-prefs-password { display: none }
