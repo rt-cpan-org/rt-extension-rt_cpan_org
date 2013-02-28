@@ -9,6 +9,6 @@ Menu->delete("tools");
 Menu->child(
     "about",
     title   => loc("About rt.cpan.org"),
-    path    => "/Public/RT/CPAN/About.html",
+    path    => "/NoAuth/RT/CPAN/About.html",
 );
 </%init>
