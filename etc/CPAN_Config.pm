@@ -3,6 +3,11 @@
 
 Set( $Organization, "rt.cpan.org" );
 
+# Logo
+Set( $LogoURL, '/NoAuth/images/cpan.png' );
+Set( $LogoLinkURL, $WebURL );
+Set( $LogoAltText, "CPAN" );
+
 # Reminders add much complexity for not much value.
 Set( $EnableReminders, 0 );
 
