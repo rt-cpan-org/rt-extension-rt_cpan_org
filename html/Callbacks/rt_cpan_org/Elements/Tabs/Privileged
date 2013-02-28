@@ -3,6 +3,9 @@ if (my $actions = PageMenu->child("actions")) {
     $actions->delete("comment");
 }
 
+Menu->child("search")->title(loc("Search Tickets"));
+Menu->delete("tools");
+
 Menu->child(
     "about",
     title   => loc("About rt.cpan.org"),

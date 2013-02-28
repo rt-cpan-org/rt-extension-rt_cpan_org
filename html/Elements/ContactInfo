@@ -45,6 +45,6 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<p class="contact-info">
+<p id="contact-info">
   Please report any issues with rt.cpan.org to <a href="mailto:rt-cpan-admin@bestpractical.com">rt-cpan-admin@bestpractical.com</a>.
 </p>

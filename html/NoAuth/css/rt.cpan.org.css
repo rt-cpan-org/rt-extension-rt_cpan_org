@@ -101,8 +101,14 @@ tt {
     font-size: 1.2em;
 }
 
-.contact-info {
+#contact-info {
+    color: white;
+    text-shadow: 1px 1px #444;
+    padding: 1em 1em 0 0;
+    margin: 0;
     text-align: right;
 }
+
+#contact-info a { color: white }
 
 a { text-decoration: underline; }
