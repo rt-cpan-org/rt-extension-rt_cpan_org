@@ -139,4 +139,8 @@ Set( %Lifecycles,
 my %lifecycles = RT->Config->Get("Lifecycles");
 %{ $lifecycles{default} } = %{ $lifecycles{cpan} };
 
+# SQL for ACLs is good for perf and accurate counts, and rt.cpan.org's ACL
+# model is pretty simple.
+Set($UseSQLForACLChecks, 1);
+
 1;
