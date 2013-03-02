@@ -114,3 +114,7 @@ tt {
 a { text-decoration: underline; }
 
 #user-prefs-password { display: none }
+
+#page-navigation {
+    z-index: 99;
+}
