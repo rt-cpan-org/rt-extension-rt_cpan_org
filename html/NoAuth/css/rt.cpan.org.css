@@ -64,6 +64,13 @@
     padding: 0;
 }
 
+@media(max-width: 650px) {
+    #rtcpan-explanation, #rtcpan-login {
+        width: auto;
+        float: none;
+    }
+}
+
 #login-box {
     width: 90%;
 }
