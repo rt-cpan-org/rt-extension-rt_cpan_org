@@ -2,10 +2,11 @@
 
 use Getopt::Long;
 
-my (@skip, @only);
+my (@skip, @only, $batch);
 GetOptions(
     "skip=s@" => \@skip,
     "only=s@" => \@only,
+    "batch"   => \$batch,
 );
 
 sub skip($);
@@ -13,6 +14,16 @@ sub skip($);
 my $perl = $ENV{'PERL'} = $^X;
 
 my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt40";
+
+unless ($batch) {
+    print <<SANITY_CHECK;
+RT:   $root
+Perl: $perl
+
+Press enter to continue or ^C to abort.
+SANITY_CHECK
+    <STDIN>;
+}
 
 my $rt_opts =
      " --prefix=$root"
