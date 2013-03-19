@@ -12,16 +12,16 @@ sub skip($);
 
 my $perl = $ENV{'PERL'} = $^X;
 
-my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt38";
+my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt40";
 
 my $rt_opts =
      " --prefix=$root"
     ." --with-db-type=mysql"
     ." --with-db-host=''" # connect via socket
     ." --with-db-port=3307"
-    ." --with-db-database=rt_cpan_org_38"
+    ." --with-db-database=rt_cpan_org_40"
     ." --disable-gpg"
-    ." --with-web-handler=fastcgi-server"
+    ." --with-web-handler=fastcgi,standalone"
     ." --with-web-user=rtcpan"
     ." --with-web-group=rtcpan";
 
@@ -65,7 +65,7 @@ unless ( skip 'RT' ) {
     my $repo = 'git://github.com/bestpractical/rt.git';
     ($_ = `git clone $repo`)
         or !$? or die "$_\n\nCouldn't export repo";
-    ($_ = `cd rt && git checkout origin/3.8-trunk && sh ./configure.ac $rt_opts && sudo make install`)
+    ($_ = `cd rt && git checkout origin/4.0-trunk && sh ./configure.ac $rt_opts && sudo make install`)
         or !$? or die "$_\n\nCouldn't upgrade RT";
 }
 
