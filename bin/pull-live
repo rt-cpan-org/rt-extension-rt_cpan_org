@@ -2,10 +2,12 @@
 
 use Getopt::Long;
 
+my $rthome = $ENV{'RTHOME'} || "/home/rtcpan/rt40";
 my (@skip, @only, $batch);
 GetOptions(
     "skip=s@" => \@skip,
     "only=s@" => \@only,
+    "rt=s"    => \$rthome,
     "batch"   => \$batch,
 );
 
@@ -13,7 +15,7 @@ sub skip($);
 
 my $perl = $ENV{'PERL'} = $^X;
 
-my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt40";
+my $root = $ENV{'RTHOME'} = $rthome;
 
 unless ($batch) {
     print <<SANITY_CHECK;
