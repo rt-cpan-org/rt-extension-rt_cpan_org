@@ -1,4 +1,4 @@
-#!/home/rtcpan/perl/bin/perl
+#!/usr/bin/env perl
 
 use Getopt::Long;
 
@@ -10,7 +10,7 @@ GetOptions(
 
 sub skip($);
 
-my $perl = $ENV{'PERL'} = '/home/rtcpan/perl/bin/perl';
+my $perl = $ENV{'PERL'} = $^X;
 
 my $root = $ENV{'RTHOME'} = "/home/rtcpan/rt38";
 
