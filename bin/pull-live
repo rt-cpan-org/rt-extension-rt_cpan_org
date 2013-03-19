@@ -71,6 +71,11 @@ my %REPOS = (
     'RT-Extension-CustomizeContentType' => 'git://github.com/bestpractical/rt-extension-customizecontenttype.git',
 );
 
+# Quick hack, should be removed as soon as the rt4 branches are merged
+$REPOS{$_} .= " --branch rt4"
+    for grep { not (/RT-Extension-/ or $REPOS{$_} =~ /--branch/) }
+        keys %REPOS;
+
 my $tmp_dir = tempdir( CLEANUP => 1 )
     or die "Couldn't get temp dir";
 
