@@ -78,9 +78,9 @@ chdir $tmp_dir;
 
 unless ( skip 'RT' ) {
     my $repo = 'git://github.com/bestpractical/rt.git';
-    ($_ = `git clone $repo`)
+    ($_ = `git clone $repo --branch 4.0-trunk`)
         or !$? or die "$_\n\nCouldn't export repo";
-    ($_ = `cd rt && git checkout origin/4.0-trunk && sh ./configure.ac $rt_opts && sudo make install`)
+    ($_ = `cd rt && sh ./configure.ac $rt_opts && sudo make install`)
         or !$? or die "$_\n\nCouldn't upgrade RT";
 }
 
