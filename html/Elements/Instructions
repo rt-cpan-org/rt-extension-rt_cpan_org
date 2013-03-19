@@ -29,6 +29,13 @@
   a distribution.
 </p>
 
+<h2>... reply to an existing bug via email?</h2>
+<p>
+  Send email to the distribution email address (see above) with a tag like the
+  following somewhere in the Subject: <strong>[rt.cpan.org #<em>NNNNN</em>]</strong>.
+  Replace <em>NNNNN</em> with the existing bug number.
+</p>
+
 <h2>... report a bug in perl itself?</h2>
 <p>
   To report bugs in perl itself, you're best off using the command-line
