@@ -77,10 +77,10 @@ my $tmp_dir = tempdir( CLEANUP => 1 )
 chdir $tmp_dir;
 
 unless ( skip 'RT' ) {
-    my $repo = 'git://github.com/bestpractical/rt.git';
-    ($_ = `git clone $repo --branch 4.0-trunk`)
-        or !$? or die "$_\n\nCouldn't export repo";
-    ($_ = `cd rt && sh ./configure.ac $rt_opts && sudo make install`)
+    my $url = 'http://download.bestpractical.com/pub/rt/release/rt.tar.gz';
+    ($_ = `curl $url | tar xzp`)
+        or !$? or die "$_\n\nCouldn't download and extract RT ($url)";
+    ($_ = `cd rt-4.* && ./configure $rt_opts && sudo make install`)
         or !$? or die "$_\n\nCouldn't upgrade RT";
 }
 
