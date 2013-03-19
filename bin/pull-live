@@ -40,6 +40,7 @@ my @UPDATE = qw{
     RT-Authen-OpenID
     RT-Extension-Utils
     CPAN2RT
+    RT-Extension-CustomizeContentType
 };
 
 my %REPOS = (
@@ -54,6 +55,7 @@ my %REPOS = (
     'RT-Extension-rt_cpan_org' => 'git://github.com/bestpractical/rt-extension-rt_cpan_org.git',
     'RT-Extension-ReportSpam'  => 'git://github.com/bestpractical/rt-extension-reportspam.git',
     'RT-Extension-Utils'       => 'git://github.com/bestpractical/rt-extension-utils.git',
+    'RT-Extension-CustomizeContentType' => 'git://github.com/bestpractical/rt-extension-customizecontenttype.git',
 );
 
 my $tmp_dir = tempdir( CLEAN => 1 )

@@ -143,4 +143,11 @@ my %lifecycles = RT->Config->Get("Lifecycles");
 # model is pretty simple.
 Set($UseSQLForACLChecks, 1);
 
+# Useful forced content types based on usage.
+# Requires RT::Extension::CustomizeContentType.
+Set(%ContentTypes,
+    (map { $_ => "text/x-perl" } qw( pm pl t )),
+    (map { $_ => "text/x-diff" } qw( diff patch )),
+);
+
 1;
