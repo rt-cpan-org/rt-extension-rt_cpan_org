@@ -71,7 +71,7 @@ my %REPOS = (
     'RT-Extension-CustomizeContentType' => 'git://github.com/bestpractical/rt-extension-customizecontenttype.git',
 );
 
-my $tmp_dir = tempdir( CLEAN => 1 )
+my $tmp_dir = tempdir( CLEANUP => 1 )
     or die "Couldn't get temp dir";
 
 chdir $tmp_dir;
