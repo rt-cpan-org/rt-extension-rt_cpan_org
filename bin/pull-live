@@ -76,7 +76,7 @@ $REPOS{$_} .= " --branch rt4"
     for grep { not (/RT-Extension-(?!rt_cpan_org)/ or $REPOS{$_} =~ /--branch/) }
         keys %REPOS;
 
-my $tmp_dir = tempdir( CLEANUP => 1 )
+my $tmp_dir = tempdir( "pull-live-XXXXX", TMPDIR => 1, CLEANUP => 1 )
     or die "Couldn't get temp dir";
 
 chdir $tmp_dir;
