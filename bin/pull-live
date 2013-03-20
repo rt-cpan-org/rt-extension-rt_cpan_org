@@ -109,6 +109,12 @@ foreach my $module (@UPDATE) {
     ($_ = `cd $module && $perl ./Makefile.PL && make && sudo make install`)
         or !$? or die "$_\n\nCouldn't install module";
 
+    for my $patch (<$module/patches/*.patch>) {
+        print "Patching RT with $patch...\n";
+        ($_ = `sudo patch --forward -p1 -d $rthome < $patch`)
+            or !$? or die "$_\n\nCouldn't patch RT";
+    }
+
     rmtree($module);
     print "\n";
 }
