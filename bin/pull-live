@@ -73,7 +73,7 @@ my %REPOS = (
 
 # Quick hack, should be removed as soon as the rt4 branches are merged
 $REPOS{$_} .= " --branch rt4"
-    for grep { not (/RT-Extension-/ or $REPOS{$_} =~ /--branch/) }
+    for grep { not (/RT-Extension-(?!rt_cpan_org)/ or $REPOS{$_} =~ /--branch/) }
         keys %REPOS;
 
 my $tmp_dir = tempdir( CLEANUP => 1 )
