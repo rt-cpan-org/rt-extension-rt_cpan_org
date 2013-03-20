@@ -125,6 +125,7 @@ foreach my $path (qw(/local/plugins/RT-Extension-rt_cpan_org/html/Public/bugs-pe
 ($_ = `rm -fr $rthome/var/mason_data/obj/`)
     or !$? or die "$_\n\nCouldn't clean mason cache";
 
+END { chdir ".." }
 
 exit 0;
 
