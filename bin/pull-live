@@ -2,7 +2,7 @@
 
 use Getopt::Long;
 
-my $rthome = $ENV{'RTHOME'} || "/home/rtcpan/rt40";
+my $rthome = $ENV{'RTHOME'} || "/home/rtcpan/rt";
 
 my $perlbrew_perl = "/home/rtcpan/perlbrew/perls/rt/bin/perl";
 my $perl =       $ENV{'PERL'} ?   $ENV{'PERL'} :
