@@ -15,11 +15,11 @@ sub skip($);
 
 my $perl = $ENV{'PERL'} = $^X;
 
-my $root = $ENV{'RTHOME'} = $rthome;
+$ENV{'RTHOME'} = $rthome;
 
 unless ($batch) {
     print <<SANITY_CHECK;
-RT:   $root
+RT:   $rthome
 Perl: $perl
 
 Press enter to continue or ^C to abort.
@@ -28,7 +28,7 @@ SANITY_CHECK
 }
 
 my $rt_opts =
-     " --prefix=$root"
+     " --prefix=$rthome"
     ." --with-db-type=mysql"
     ." --with-db-host=''" # connect via socket
     ." --with-db-port=3307"
@@ -115,14 +115,14 @@ foreach my $module (@UPDATE) {
 
 # adjust bugs-per-dist.data and queue-addresses
 foreach my $path (qw(/local/plugins/RT-Extension-rt_cpan_org/html/Public/bugs-per-dist.data /local/plugins/RT-Extension-rt_cpan_org/html/NoAuth/cpan)) {
-    my $f = $root . $path;
+    my $f = $rthome . $path;
     `touch $f` unless -e $f;
     ($_ = `chown -R rtcpan:rtcpan $f`)
         or !$? or die "$_\n\nCouldn't change owner of '$f'";
 }
 
 # clean mason cache
-($_ = `rm -fr $root/var/mason_data/obj/`)
+($_ = `rm -fr $rthome/var/mason_data/obj/`)
     or !$? or die "$_\n\nCouldn't clean mason cache";
 
 
