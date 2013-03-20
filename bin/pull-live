@@ -3,18 +3,24 @@
 use Getopt::Long;
 
 my $rthome = $ENV{'RTHOME'} || "/home/rtcpan/rt40";
+
+my $perlbrew_perl = "/home/rtcpan/perlbrew/perls/rt/bin/perl";
+my $perl =       $ENV{'PERL'} ?   $ENV{'PERL'} :
+            -e $perlbrew_perl ? $perlbrew_perl :
+                                           $^X ;
+
 my (@skip, @only, $batch);
 GetOptions(
     "skip=s@" => \@skip,
     "only=s@" => \@only,
     "rt=s"    => \$rthome,
+    "perl=s"  => \$perl,
     "batch"   => \$batch,
 );
 
 sub skip($);
 
-my $perl = $ENV{'PERL'} = $^X;
-
+$ENV{'PERL'} = $perl;
 $ENV{'RTHOME'} = $rthome;
 
 unless ($batch) {
