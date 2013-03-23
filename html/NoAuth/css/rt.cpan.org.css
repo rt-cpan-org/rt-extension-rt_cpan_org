@@ -133,3 +133,6 @@ a { text-decoration: underline; }
 .select-queue.ui-autocomplete-input {
     padding-right: 20px;  /* don't type under the spinner */
 }
+
+#topactions input[type=text], #topactions select { width: 10em; }
+#topactions button, #topactions input[type=submit], #topactions .button { width: auto }
