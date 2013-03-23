@@ -134,5 +134,5 @@ a { text-decoration: underline; }
     padding-right: 20px;  /* don't type under the spinner */
 }
 
-#topactions input[type=text], #topactions select { width: 10em; }
+#topactions input[name=q], #topactions .select-queue { width: 10em; }
 #topactions button, #topactions input[type=submit], #topactions .button { width: auto }
