@@ -125,3 +125,11 @@ a { text-decoration: underline; }
 #page-navigation {
     z-index: 99;
 }
+
+.ui-autocomplete-loading {
+    background: url(<% RT->Config->Get("WebPath") %>/NoAuth/images/jquery_ui/ui-anim_basic_16x16.gif) right center no-repeat;
+}
+
+.select-queue.ui-autocomplete-input {
+    padding-right: 20px;  /* don't type under the spinner */
+}
