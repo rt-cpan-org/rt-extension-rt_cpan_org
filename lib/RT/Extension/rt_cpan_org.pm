@@ -92,6 +92,8 @@ sub ShowRequestedPage {
     );
 }
 
+package RT::Extension::rt_cpan_org;
+
 =head1 AUTHOR
 
 Thomas Sibley E<lt>trs@bestpractical.comE<gt>
