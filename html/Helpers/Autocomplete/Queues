@@ -29,6 +29,6 @@ $queues->Limit(
 my @suggestions;
 while (my $q = $queues->Next) {
     next if $right and not $q->CurrentUserHasRight($right);
-    push @suggestions, $q->Name;
+    push @suggestions, { label => $q->Name, value => $q->Name };
 }
 </%INIT>

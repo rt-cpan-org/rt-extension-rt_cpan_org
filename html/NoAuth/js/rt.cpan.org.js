@@ -13,15 +13,15 @@ jQuery(function(){
 
     jQuery("input[data-autocomplete=Queues]").each(function() {
         var input = jQuery(this);
-        var opts  = {
-            source: <% RT->Config->Get('WebPath') |n,j%>
-                    + "/Helpers/Autocomplete/Queues?max=20",
+        var opts = {
             minLength: 2,
             delay: 100
         };
+        var rt_source = <% RT->Config->Get('WebPath') |n,j%>
+                      + "/Helpers/Autocomplete/Queues?max=20";
 
         if (input.attr("data-autocomplete-params") != null)
-            opts.source = opts.source + "&" + input.attr("data-autocomplete-params");
+            rt_source += "&" + input.attr("data-autocomplete-params");
 
         // Auto-submit once a queue is chosen
         if (input.attr("data-autocomplete-autosubmit")) {
@@ -31,7 +31,70 @@ jQuery(function(){
             };
         }
 
-        input.autocomplete(opts);
+        var current_request;
+        opts.source = function( request, response ) {
+            var this_request;
+
+            if (current_request)
+                current_request.abort();
+
+            if (/:/.test(request.term)) {
+                // Adaptive autocomplete!  If the term contains a colon, look
+                // for modules and map to distributions via metacpan.
+                this_request = current_request = jQuery.ajax({
+                    url: "http://api.metacpan.org/v0/search/autocomplete",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function( data ) {
+                        if (!data || data.timed_out || !data.hits || this_request !== current_request)
+                            return;
+
+                        response( jQuery.map( data.hits.hits, function( item ) {
+                            return {
+                                label: item.fields.documentation,
+                                value: item.fields.distribution,
+                                module: true
+                            }
+                        }));
+                    }
+                });
+            } else {
+                // Otherwise, look for distributions (queues) on rt.cpan.org.
+                this_request = current_request = jQuery.ajax({
+                    url: rt_source,
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function( data ) {
+                        if (data && this_request === current_request)
+                            response(data);
+                    }
+                });
+            }
+        };
+
+        input.autocomplete(opts).data("autocomplete")._renderItem = function(ul, item) {
+            var rendered = jQuery("<a/>");
+
+            if (item.module) {
+                rendered.html(
+                      rendered.text(item.label).html()
+                    + "<small> in "
+                    + rendered.text(item.value).html()
+                    + "</small>"
+                );
+            } else {
+                rendered.text( item.label );
+            }
+
+            return jQuery("<li/>")
+                .data( "item.autocomplete", item )
+                .append( rendered )
+                .appendTo( ul );
+        };
     });
 
     // XXX TODO: Support users as well
