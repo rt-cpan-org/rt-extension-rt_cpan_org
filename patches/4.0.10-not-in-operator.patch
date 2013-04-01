@@ -1,4 +1,4 @@
-From eca33d861ed6e50d63a63d77ee2052a429ae75c2 Mon Sep 17 00:00:00 2001
+From 691c5065623a526aa8af664e10f5aae6778eb019 Mon Sep 17 00:00:00 2001
 From: Thomas Sibley <trs@bestpractical.com>
 Date: Mon, 1 Apr 2013 15:39:23 -0700
 Subject: [PATCH] Allow the NOT IN operator in Limit calls
@@ -9,7 +9,7 @@ IN/NOT IN is supported by DBIx::SearchBuilder with the 1.63_01 release.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/RT/SearchBuilder.pm b/lib/RT/SearchBuilder.pm
-index 1df5ac1..b634ec2 100644
+index 1df5ac1..0ace421 100644
 --- a/lib/RT/SearchBuilder.pm
 +++ b/lib/RT/SearchBuilder.pm
 @@ -279,7 +279,7 @@ sub Limit {
@@ -17,7 +17,7 @@ index 1df5ac1..b634ec2 100644
                                    |(NOT\s*)?MATCHES
                                    |IS(\s*NOT)?
 -                                  |IN
-+                                  |(NOT\s*)IN
++                                  |(NOT\s*)?IN
                                    |\@\@)$/ix) {
          $RT::Logger->crit("Possible SQL injection attack: $ARGS{FIELD} $ARGS{OPERATOR}");
          $self->SUPER::Limit(
