@@ -89,7 +89,7 @@ unless ( skip 'RT' ) {
     my $url = 'http://download.bestpractical.com/pub/rt/release/rt.tar.gz';
     run("curl $url | tar xzp")
         or die "Couldn't download and extract RT ($url)";
-    run("cd rt-4.* && ./configure $rt_opts && sudo make install")
+    run("cd rt-4.* && ./configure $rt_opts && make install")
         or die "Couldn't upgrade RT";
 }
 
@@ -110,12 +110,12 @@ foreach my $module (@UPDATE) {
     }
 
     print "Installing $module...\n";
-    run("cd $module && $perl ./Makefile.PL && make && sudo make install")
+    run("cd $module && $perl ./Makefile.PL && make && make install")
         or die "Couldn't install module";
 
     for my $patch (<$module/patches/*.patch>) {
         print "Patching RT with $patch...\n";
-        run("sudo patch --forward -p1 -d $rthome < $patch",
+        run("patch --forward -p1 -d $rthome < $patch",
             ignore_exit => 1,
             fail_on     => qr/FAILED/)
                 or warn "Couldn't apply patch $patch.  Please apply it manually.\n";
