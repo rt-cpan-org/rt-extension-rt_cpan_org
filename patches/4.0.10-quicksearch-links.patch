@@ -1,64 +1,3 @@
-From 292dd3bf6fb7371593a8a978868308a1f1cc75d1 Mon Sep 17 00:00:00 2001
-From: Thomas Sibley <trs@bestpractical.com>
-Date: Tue, 26 Feb 2013 18:57:04 -0800
-Subject: [PATCH 1/2] Use a tiny comment to fix vim's syntax highlighting
-
----
- share/html/Elements/QueueSummaryByLifecycle | 2 +-
- share/html/Elements/QueueSummaryByStatus    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/share/html/Elements/QueueSummaryByLifecycle b/share/html/Elements/QueueSummaryByLifecycle
-index 01514f1..6e5e0cb 100644
---- a/share/html/Elements/QueueSummaryByLifecycle
-+++ b/share/html/Elements/QueueSummaryByLifecycle
-@@ -67,7 +67,7 @@ for my $queue (@queues) {
- 
-     $i++;
-     my $name = $queue->{Name};
--    $name =~ s/(['\\])/\\$1/g;
-+    $name =~ s/(['\\])/\\$1/g; #'
-     my $queue_cond = "Queue = '$name' AND ";
-     my $all_q = $queue_cond . '(' . join( " OR ", map "Status = '$_'", @cur_statuses ) . ')';
- </%PERL>
-diff --git a/share/html/Elements/QueueSummaryByStatus b/share/html/Elements/QueueSummaryByStatus
-index b843bba..082a5dc 100644
---- a/share/html/Elements/QueueSummaryByStatus
-+++ b/share/html/Elements/QueueSummaryByStatus
-@@ -59,7 +59,7 @@ my $i = 0;
- for my $queue (@queues) {
-     $i++;
-     my $name = $queue->{Name};
--    $name =~ s/(['\\])/\\$1/g;
-+    $name =~ s/(['\\])/\\$1/g; #'
-     my $queue_cond = "Queue = '$name' AND ";
-     my $lifecycle = $lifecycle{ lc $queue->{'Lifecycle'} };
-     my $all_q = $queue_cond . '(' . join( " OR ", map "Status = '$_'", grep $lifecycle->IsValid($_), @statuses ) . ')';
--- 
-1.7.11.3
-
-
-From 5c0efc3773eaba35d9853fa45691d8c7b506d8b2 Mon Sep 17 00:00:00 2001
-From: Thomas Sibley <trs@bestpractical.com>
-Date: Tue, 26 Feb 2013 19:29:10 -0800
-Subject: [PATCH 2/2] Callbacks for changing the link destinations in the
- queue summaries
-
-While likely to be used only rarely, these callbacks are very useful for
-extensions which provide a richer "queue dashboard" than the vanilla
-search results normally linked to by the queue summary portlets.
-Without the callbacks, such extensions are forced to overlay the entire
-files just to change some URLs.
-
-The duplication between the two types of queue summaries is unfortunate,
-but large scale refactoring is out of scope for the simple goal of this
-commit.  A future refactoring isn't hampered any by the additional
-duplication.
----
- share/html/Elements/QueueSummaryByLifecycle | 33 +++++++++++++++++++++++-----
- share/html/Elements/QueueSummaryByStatus    | 34 ++++++++++++++++++++++++-----
- 2 files changed, 55 insertions(+), 12 deletions(-)
-
 diff --git a/share/html/Elements/QueueSummaryByLifecycle b/share/html/Elements/QueueSummaryByLifecycle
 index 6e5e0cb..44d6b5a 100644
 --- a/share/html/Elements/QueueSummaryByLifecycle
@@ -68,7 +7,7 @@ index 6e5e0cb..44d6b5a 100644
  
      $i++;
 -    my $name = $queue->{Name};
--    $name =~ s/(['\\])/\\$1/g; #'
+-    $name =~ s/(['\\])/\\$1/g;
 -    my $queue_cond = "Queue = '$name' AND ";
 -    my $all_q = $queue_cond . '(' . join( " OR ", map "Status = '$_'", @cur_statuses ) . ')';
  </%PERL>
@@ -127,7 +66,7 @@ index 082a5dc..2a8dc53 100644
  for my $queue (@queues) {
      $i++;
 -    my $name = $queue->{Name};
--    $name =~ s/(['\\])/\\$1/g; #'
+-    $name =~ s/(['\\])/\\$1/g;
 -    my $queue_cond = "Queue = '$name' AND ";
      my $lifecycle = $lifecycle{ lc $queue->{'Lifecycle'} };
 -    my $all_q = $queue_cond . '(' . join( " OR ", map "Status = '$_'", grep $lifecycle->IsValid($_), @statuses ) . ')';
