@@ -104,11 +104,11 @@ foreach my $module (@UPDATE) {
     my $repo = $REPOS{ $module };
     print "Getting $repo...\n";
     if ( $repo =~ /^svn/ ) {
-    ($_ = `svn export --quiet --non-interactive --force $repo $module`)
-        or !$? or die "$_\n\nCouldn't export repo";
+        ($_ = `svn export --quiet --non-interactive --force $repo $module`)
+            or !$? or die "$_\n\nCouldn't export repo";
     } else {
-    ($_ = `git clone --quiet $repo $module`)
-        or !$? or die "$_\n\nCouldn't export repo";
+        ($_ = `git clone --quiet $repo $module`)
+            or !$? or die "$_\n\nCouldn't export repo";
     }
 
     print "Installing $module...\n";
