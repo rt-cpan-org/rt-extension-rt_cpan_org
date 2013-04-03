@@ -37,12 +37,10 @@ my $rt_opts =
      " --prefix=$rthome"
     ." --with-db-type=mysql"
     ." --with-db-host=''" # connect via socket
-    ." --with-db-port=3307"
     ." --with-db-database=rt_cpan_org_40"
     ." --disable-gpg"
     ." --with-web-handler=fastcgi,standalone"
-    ." --with-web-user=rtcpan"
-    ." --with-web-group=rtcpan";
+    ." --with-my-user-group"
 
 use File::Temp qw(tempdir);
 use File::Path qw(rmtree);
