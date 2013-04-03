@@ -89,10 +89,10 @@ chdir $tmp_dir;
 
 unless ( skip 'RT' ) {
     my $url = 'http://download.bestpractical.com/pub/rt/release/rt.tar.gz';
-    ($_ = `curl $url | tar xzp`)
-        or !$? or die "$_\n\nCouldn't download and extract RT ($url)";
-    ($_ = `cd rt-4.* && ./configure $rt_opts && sudo make install`)
-        or !$? or die "$_\n\nCouldn't upgrade RT";
+    run("curl $url | tar xzp")
+        or die "Couldn't download and extract RT ($url)";
+    run("cd rt-4.* && ./configure $rt_opts && sudo make install")
+        or die "Couldn't upgrade RT";
 }
 
 
@@ -104,21 +104,23 @@ foreach my $module (@UPDATE) {
     my $repo = $REPOS{ $module };
     print "Getting $repo...\n";
     if ( $repo =~ /^svn/ ) {
-        ($_ = `svn export --quiet --non-interactive --force $repo $module`)
-            or !$? or die "$_\n\nCouldn't export repo";
+        run("svn export --quiet --non-interactive --force $repo $module")
+            or die "Couldn't export repo";
     } else {
-        ($_ = `git clone --quiet $repo $module`)
-            or !$? or die "$_\n\nCouldn't export repo";
+        run("git clone --quiet $repo $module")
+            or die "Couldn't export repo";
     }
 
     print "Installing $module...\n";
-    ($_ = `cd $module && $perl ./Makefile.PL && make && sudo make install`)
-        or !$? or die "$_\n\nCouldn't install module";
+    run("cd $module && $perl ./Makefile.PL && make && sudo make install")
+        or die "Couldn't install module";
 
     for my $patch (<$module/patches/*.patch>) {
         print "Patching RT with $patch...\n";
-        ($_ = `sudo patch --forward -p1 -d $rthome < $patch`)
-            or !$? or die "$_\n\nCouldn't patch RT";
+        run("sudo patch --forward -p1 -d $rthome < $patch",
+            ignore_exit => 1,
+            fail_on     => qr/FAILED/)
+                or warn "Couldn't apply patch $patch.  Please apply it manually.\n";
     }
 
     rmtree($module);
@@ -128,14 +130,14 @@ foreach my $module (@UPDATE) {
 # adjust bugs-per-dist.data and queue-addresses
 foreach my $path (qw(/local/plugins/RT-Extension-rt_cpan_org/html/Public/bugs-per-dist.data /local/plugins/RT-Extension-rt_cpan_org/html/NoAuth/cpan)) {
     my $f = $rthome . $path;
-    `touch $f` unless -e $f;
-    ($_ = `chown -R rtcpan:rtcpan $f`)
-        or !$? or die "$_\n\nCouldn't change owner of '$f'";
+    run("touch $f") unless -e $f;
+    run("chown -R rtcpan:rtcpan $f")
+        or warn "Couldn't change owner of '$f'. Please fix the owner manually.\n";
 }
 
 # clean mason cache
-($_ = `rm -fr $rthome/var/mason_data/obj/`)
-    or !$? or die "$_\n\nCouldn't clean mason cache";
+run("rm -fr $rthome/var/mason_data/obj/")
+    or warn "Couldn't clean mason cache\n";
 
 END { chdir ".." }
 
@@ -148,3 +150,26 @@ sub skip($) {
     return 0;
 }
 
+sub run {
+    my $cmd     = shift;
+    my %args    = @_;
+    my $stdout  = `$cmd`;
+    my $failed  = $args{ignore_exit} ? 0 : $?;
+
+    $failed = 1 if $args{fail_on}
+        and $stdout =~ /$args{fail_on}/;
+
+    if ($failed) {
+        warn "  Command: $cmd\n";
+        if    ($? == -1) { warn "  Failed to execute: $cmd\n" }
+        elsif ($? & 127) { warn "  Child died with signal ", $? & 127, "\n" }
+        else             { warn "  Command exited with ", $? >> 8, "\n" }
+        if ($stdout) {
+            warn "  Command output:\n";
+            warn "    $_\n" for split /\n/, $stdout;
+        }
+        return 0;
+    } else {
+        return 1;
+    }
+}
