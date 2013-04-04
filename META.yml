@@ -20,7 +20,12 @@ no_index:
     - html
     - inc
 requires:
+  DBD::SQLite: 0
+  DBI: 0
+  File::Remove: 0
+  File::Spec: 0
   Hook::LexWrap: 0
+  IO::Compress::Gzip: 0
   perl: 5.8.3
 resources:
   license: http://opensource.org/licenses/gpl-license.php

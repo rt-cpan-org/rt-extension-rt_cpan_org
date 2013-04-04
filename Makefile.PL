@@ -8,4 +8,11 @@ requires_rt('4.0.0');
 
 requires        'Hook::LexWrap';
 
+# rt-cpan-export-db
+requires 'DBI';
+requires 'DBD::SQLite';
+requires 'IO::Compress::Gzip';
+requires 'File::Spec';
+requires 'File::Remove';
+
 WriteAll();
