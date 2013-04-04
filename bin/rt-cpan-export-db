@@ -15,7 +15,7 @@ use DBI                ();
 use DBD::SQLite        ();
 
 sub usage {
-    print STDERR "\nUsage: perl -I /opt/rt3/local/lib -I/opt/rt3/lib $0 /export/directory\n\n";
+    print STDERR "\nUsage: perl -I /opt/rt4/local/lib -I/opt/rt4/lib $0 /export/directory\n\n";
     return 1;
 }
 
