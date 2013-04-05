@@ -83,6 +83,7 @@ Set( %Lifecycles,
             deleted  => [qw(new open stalled patched rejected resolved)],
         },
         rights => {
+            '* -> open'     => 'OpenTicket',
             '* -> deleted'  => 'DeleteTicket',
             '* -> *'        => 'ModifyTicket',
         },

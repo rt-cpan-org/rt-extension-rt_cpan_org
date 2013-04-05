@@ -71,7 +71,7 @@ my $HasRight = __PACKAGE__->can("HasRight")
     my $public = RT->Config->Get("WebPublicUser");
 
     if ($public and lc $self->Object->__Value('Name') eq lc $public
-        and $args{Right} =~ /^(Create|ReplyTo)Ticket$/) {
+        and $args{Right} =~ /^(Create|ReplyTo|Open)Ticket$/) {
 
         return (undef);
     }
