@@ -3,6 +3,7 @@ use utf8;
 
 if (my $actions = PageMenu->child("actions")) {
     $actions->delete("comment");
+    $actions->delete("extract-article");
 }
 
 Menu->child("search")->title(loc("Search Tickets"));
