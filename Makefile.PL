@@ -6,8 +6,6 @@ readme_from     ('lib/RT/Extension/rt_cpan_org.pm');
 
 requires_rt('4.0.0');
 
-requires        'Hook::LexWrap';
-
 # rt-cpan-export-db
 requires 'DBI';
 requires 'DBD::SQLite';
