@@ -9,4 +9,32 @@ our @ACL = (
     }
 );
 
+our @ScripConditions = (
+    {   Name                 => 'On Correspond and New or Stalled',
+        Description          => 'When a new or stalled ticket receives a correspondence',
+        ApplicableTransTypes => 'Correspond',
+        ExecModule           => 'Status',
+        Argument             => 'new,stalled', },
+);
+
+our @Scrips = (
+    {   Description    => 'On Correspond and New or Stalled, then Open Ticket',
+        ScripCondition => 'On Correspond and New or Stalled',
+        ScripAction    => 'Open Tickets',
+        Template       => 'Blank' },
+);
+
+our @Final = (
+    sub {
+        my $scrip = RT::Scrip->new( RT->SystemUser );
+        $scrip->LoadByCols( Description => "On Correspond Open Tickets" );
+        RT->Logger->error("Unable to find scrip On Correspond Open Tickets"), return
+            unless $scrip->id;
+
+        my ($ok, $msg) = $scrip->SetStage('Disabled');
+        RT->Logger->error("Unable to set scrip stage to Disabled: $msg")
+            unless $ok;
+    },
+);
+
 1;
