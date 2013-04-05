@@ -120,6 +120,14 @@ Set( %Lifecycles,
             'stalled -> open'  => {
                 label  => 'Open It', # loc
             },
+            'patched -> open'  => {
+                label   => 'Re-open',
+                update  => 'Respond',
+            },
+            'patched -> resolved' => {
+                label   => 'Resolve',
+                update  => 'Respond',
+            },
             'resolved -> open' => {
                 label  => 'Re-open', # loc
                 update => 'Respond',
