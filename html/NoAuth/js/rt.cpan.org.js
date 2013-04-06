@@ -11,6 +11,8 @@ jQuery(function(){
         parent.innerHTML = parent.innerHTML.replace(/\[\]/,"");
     });
 
+    jQuery("select[multiple], select[size]").resizable({ handles: "s" });
+
     jQuery("input[data-autocomplete=Queues]").each(function() {
         var input = jQuery(this);
         var opts = {

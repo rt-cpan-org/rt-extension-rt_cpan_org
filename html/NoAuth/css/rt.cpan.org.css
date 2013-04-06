@@ -136,3 +136,10 @@ a { text-decoration: underline; }
 
 #topactions input[name=q], #topactions .select-queue { width: 10em; }
 #topactions button, #topactions input[type=submit], #topactions .button { width: auto }
+
+/* jQuery UI resizable handle for S(outh) */
+.ui-resizable-handle.ui-resizable-s {
+    background: transparent url(/NoAuth/images/resize-handle.png) center center no-repeat;
+    height: 8px;
+    bottom: 0;
+}
