@@ -37,7 +37,7 @@ my $rt_opts =
      " --prefix=$rthome"
     ." --with-db-type=mysql"
     ." --with-db-host=''" # connect via socket
-    ." --with-db-database=rt_cpan_org_40"
+    ." --with-db-database=rt_cpan_org"
     ." --disable-gpg"
     ." --with-web-handler=fastcgi,standalone"
     ." --with-my-user-group";
