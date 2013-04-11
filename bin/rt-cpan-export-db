@@ -147,18 +147,13 @@ sub fetch_next {
 sub default_search {
     my $last_seen = shift || 0;
     my $tickets = RT::Tickets->new( $RT::SystemUser );
-    $tickets->_SQLLimit(
-        ENTRYAGGREGATOR => 'AND',
-        FIELD           => 'id',
-        OPERATOR        => '>',
-        VALUE           => $last_seen,
-    );
-    my $queues = $tickets->Join(
+    $tickets->FromSQL("id > $last_seen");
+    my $queues = $tickets->RT::SearchBuilder::Join(
         FIELD1 => 'Queue',
         TABLE2 => 'Queues',
         FIELD2 => 'id',
     );
-    $tickets->_SQLLimit(
+    $tickets->RT::SearchBuilder::Limit(
         ENTRYAGGREGATOR => 'AND',
         ALIAS           => $queues,
         FIELD           => 'Disabled',
