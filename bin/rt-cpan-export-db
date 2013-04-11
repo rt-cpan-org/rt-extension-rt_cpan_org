@@ -159,6 +159,7 @@ sub default_search {
         FIELD           => 'Disabled',
         VALUE           => 0,
     );
+    $tickets->{joins_are_distinct} = 1;
     $tickets->OrderBy( FIELD => 'id', ORDER => 'ASC' );
     $tickets->RowsPerPage( PAGE_SIZE );
     return $tickets;
