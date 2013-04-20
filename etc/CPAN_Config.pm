@@ -157,6 +157,10 @@ Set($UseSQLForACLChecks, 1);
 Set(%ContentTypes,
     (map { $_ => "text/x-perl" } qw( pm pl t psgi pmc )),
     (map { $_ => "text/x-diff" } qw( diff patch )),
+    "xs"    => "text/x-csrc",
+    "c"     => "text/x-csrc",
+    "h"     => "text/x-chdr",
+    "pod"   => "text/x-pod",
 );
 
 1;
