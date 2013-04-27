@@ -52,42 +52,24 @@ use warnings;
 
 package RT::Extension::rt_cpan_org;
 
-our $VERSION = '0.03';
+our $VERSION = '4.0';
 
 =head1 NAME
 
 RT::Extension::rt_cpan_org - The customizations that turn a RT into a RT for rt.cpan.org
 
-=head1 DESCRIPTION
-
-=head1 OVERLAYS AND CUSTOMIZATIONS
-
-=head2 autohandler
-
-=over 4
-
-=item * C<$goto> argument
-
-=item * C<$nossl> argument and redirect to https in some
-cases
-
-=item * rewriting Web* options depending on schema (http/https)
-
-=item * XXX: old code was disabling everything related to
-SelfService. Not sure why. Should be checked.
-
-=back
-
 =cut
 
-# there is no sense in overriding default queue for rt.cpan.org
-require RT::Config;
-$RT::Config::META{'DefaultQueue'}{'Overridable'} = 0;
-$RT::Config::META{'UsernameFormat'}{'Overridable'} = 0;
+RT->AddStyleSheets("jquery.ui.resizable.css", "rt.cpan.org.css");
+RT->AddJavaScript("jquery.ui.resizable.js", "rt.cpan.org.js");
 
-$RT::Config::META{'WebDefaultStylesheet'}{'WidgetArguments'}{'Values'} = [
-    qw(rt.cpan.org-web2 rt.cpan.org-3.5 rt.cpan.org-3.4)
-];
+require RT::Config;
+
+# There is no sense in overriding default queue for rt.cpan.org
+$RT::Config::META{'DefaultQueue'}{'Overridable'} = 0;
+
+# We provide a custom username format; others are not useful.
+$RT::Config::META{'UsernameFormat'}{'Overridable'} = 0;
 
 require RT::Interface::Web;
 package RT::Interface::Web;
@@ -100,12 +82,17 @@ sub ShowRequestedPage {
 
     SendSessionCookie();
 
+    # precache all system level rights for the current user
+    $HTML::Mason::Commands::session{CurrentUser}->PrincipalObj->HasRights( Object => RT->System );
+
     return $m->comp(
         { base_comp => $m->request_comp },
         $m->fetch_next,
         %$ARGS
     );
 }
+
+package RT::Extension::rt_cpan_org;
 
 =head1 AUTHOR
 

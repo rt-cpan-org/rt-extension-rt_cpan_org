@@ -1,8 +1,0 @@
-<%ARGS>
-$goto => undef
-</%ARGS>
-<%INIT>
-return unless $goto;
-
-$m->redirect( RT->Config->Get('WebBaseURL') . $goto );
-</%INIT>

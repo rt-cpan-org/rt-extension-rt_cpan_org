@@ -49,6 +49,7 @@ package RT::Principal;
 
 use strict;
 use warnings;
+no warnings 'redefine';
 
 =head1 EXTENDING
 
@@ -61,17 +62,20 @@ L<RT::BugTracker::Public>'s doc.
 
 =cut
 
-use Hook::LexWrap;
-wrap 'RT::Principal::HasRight', pre => sub {
+my $HasRight = __PACKAGE__->can("HasRight")
+    or die "No HasRight in RT::Principal?!";
+
+*HasRight = sub {
     my $self = $_[0];
-    return unless defined $RT::WebPublicUser && length $RT::WebPublicUser;
-    return unless lc $self->Object->__Value('Name') eq lc $RT::WebPublicUser;
+    my %args = @_[1..$#_];
+    my $public = RT->Config->Get("WebPublicUser");
 
-    my %args = @_[1 .. (@_-2)];
-    return unless $args{'Right'} eq 'CreateTicket'
-        || $args{'Right'} eq 'ReplyToTicket';
+    if ($public and lc $self->Object->__Value('Name') eq lc $public
+        and $args{Right} =~ /^(Create|ReplyTo|Open)Ticket$/) {
 
-    $_[-1] = 0;
+        return (undef);
+    }
+    return $HasRight->(@_);
 };
 
 1;

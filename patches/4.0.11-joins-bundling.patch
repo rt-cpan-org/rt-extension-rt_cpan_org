@@ -1,0 +1,185 @@
+From bf5cd6adcbe857ed6ef5b6c2b3fa16effe174b80 Mon Sep 17 00:00:00 2001
+From: Ruslan Zakirov <ruz@bestpractical.com>
+Date: Thu, 4 Apr 2013 20:03:48 +0400
+Subject: [PATCH] bundle together watcher searches
+
+it's first attempt at wide bundling of watcher searches.
+So far it supports:
+
+* bundling of positive conditions (=, like, is null)
+* conditions can be mixed with conditions on other fields:
+
+    (Cc.foo = a AND Subject = s) OR (Cc.foo = b AND Subject = s)
+
+The following cases are not bundled while in theory they could:
+* Cc = 'foo' OR Requestor = 'bar'
+* Cc != 'foo' AND Cc != 'bar'
+---
+ lib/RT/Tickets.pm     | 18 ++++++++++------
+ lib/RT/Tickets_SQL.pm | 58 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 67 insertions(+), 9 deletions(-)
+
+diff --git a/lib/RT/Tickets.pm b/lib/RT/Tickets.pm
+index 3b834e0..416b4a8 100644
+--- a/lib/RT/Tickets.pm
++++ b/lib/RT/Tickets.pm
+@@ -939,13 +939,18 @@ sub _WatcherLimit {
+     }
+     $rest{SUBKEY} ||= 'EmailAddress';
+ 
+-    my $groups = $self->_RoleGroupsJoin( Type => $type, Class => $class, New => !$type );
++    my ($groups, $group_members, $users);
++    if ( $rest{'BUNDLE'} ) {
++        ($groups, $group_members, $users) = @{ $rest{'BUNDLE'} };
++    } else {
++        $groups = $self->_RoleGroupsJoin( Type => $type, Class => $class, New => !$type );
++    }
+ 
+     $self->_OpenParen;
+     if ( $op =~ /^IS(?: NOT)?$/i ) {
+         # is [not] empty case
+ 
+-        my $group_members = $self->_GroupMembersJoin( GroupsAlias => $groups );
++        $group_members ||= $self->_GroupMembersJoin( GroupsAlias => $groups );
+         # to avoid joining the table Users into the query, we just join GM
+         # and make sure we don't match records where group is member of itself
+         $self->SUPER::Limit(
+@@ -983,7 +988,7 @@ sub _WatcherLimit {
+         $users_obj->RowsPerPage(2);
+         my @users = @{ $users_obj->ItemsArrayRef };
+ 
+-        my $group_members = $self->_GroupMembersJoin( GroupsAlias => $groups );
++        $group_members ||= $self->_GroupMembersJoin( GroupsAlias => $groups );
+         if ( @users <= 1 ) {
+             my $uid = 0;
+             $uid = $users[0]->id if @users;
+@@ -1008,7 +1013,7 @@ sub _WatcherLimit {
+                 VALUE      => "$group_members.MemberId",
+                 QUOTEVALUE => 0,
+             );
+-            my $users = $self->Join(
++            $users ||= $self->Join(
+                 TYPE            => 'LEFT',
+                 ALIAS1          => $group_members,
+                 FIELD1          => 'MemberId',
+@@ -1034,10 +1039,10 @@ sub _WatcherLimit {
+     } else {
+         # positive condition case
+ 
+-        my $group_members = $self->_GroupMembersJoin(
++        $group_members ||= $self->_GroupMembersJoin(
+             GroupsAlias => $groups, New => 1, Left => 0
+         );
+-        my $users = $self->Join(
++        $users ||= $self->Join(
+             TYPE            => 'LEFT',
+             ALIAS1          => $group_members,
+             FIELD1          => 'MemberId',
+@@ -1054,6 +1059,7 @@ sub _WatcherLimit {
+         );
+     }
+     $self->_CloseParen;
++    return ($groups, $group_members, $users);
+ }
+ 
+ sub _RoleGroupsJoin {
+diff --git a/lib/RT/Tickets_SQL.pm b/lib/RT/Tickets_SQL.pm
+index 608862a..bd71ece 100644
+--- a/lib/RT/Tickets_SQL.pm
++++ b/lib/RT/Tickets_SQL.pm
+@@ -171,19 +171,40 @@ sub _parser {
+     my @bundle;
+     my $ea = '';
+ 
++    my %sub_tree;
++    my $depth = 0;
++
+     my %callback;
+     $callback{'OpenParen'} = sub {
+       $self->_close_bundle(@bundle); @bundle = ();
+-      $self->_OpenParen
++      $self->_OpenParen;
++      $depth++;
++      push @$_, '(' foreach values %sub_tree;
+     };
+     $callback{'CloseParen'} = sub {
+       $self->_close_bundle(@bundle); @bundle = ();
+       $self->_CloseParen;
++      $depth--;
++      foreach my $list ( values %sub_tree ) {
++          if ( $list->[-1] eq '(' ) {
++              pop @$list;
++              pop @$list if $list->[-1] =~ /^(?:AND|OR)$/i;
++          }
++          else {
++              pop @$list while $list->[-2] ne '(';
++              $list->[-1] = pop @$list;
++          }
++      }
++    };
++    $callback{'EntryAggregator'} = sub {
++      $ea = $_[0] || '';
++      push @$_, $ea foreach values %sub_tree;
+     };
+-    $callback{'EntryAggregator'} = sub { $ea = $_[0] || '' };
+     $callback{'Condition'} = sub {
+         my ($key, $op, $value) = @_;
+ 
++        my ($negative_op, $null_op, $inv_op, $range_op)
++            = $self->ClassifySQLOperation( $op );
+         # key has dot then it's compound variant and we have subkey
+         my $subkey = '';
+         ($key, $subkey) = ($1, $2) if $key =~ /^([^\.]+)\.(.+)$/;
+@@ -225,10 +246,23 @@ sub _parser {
+         }
+         else {
+             $self->_close_bundle(@bundle); @bundle = ();
+-            $sub->( $self, $key, $op, $value,
++            my @res; my $bundle_with;
++            if ( $class eq 'WATCHERFIELD' && $key ne 'Owner' && !$negative_op && (!$null_op || $subkey) ) {
++                if ( !$sub_tree{$key} ) {
++                  $sub_tree{$key} = [ ('(')x$depth, \@res ];
++                } else {
++                  $bundle_with = $self->_check_bundling_possibility( @{ $sub_tree{$key} } );
++                  if ( !$bundle_with && $sub_tree{$key}[-1] eq '(' ) {
++                        push @{ $sub_tree{$key} }, \@res;
++                  }
++                }
++            }
++            pop @$_ foreach grep @$_ && $_->[-1] =~ /^(?:AND|OR)$/i, values %sub_tree;
++            @res = $sub->( $self, $key, $op, $value,
+                     SUBCLAUSE       => '',  # don't need anymore
+                     ENTRYAGGREGATOR => $ea,
+                     SUBKEY          => $subkey,
++                    BUNDLE          => $bundle_with,
+                   );
+         }
+         $self->{_sql_looking_at}{lc $key} = 1;
+@@ -238,6 +272,24 @@ sub _parser {
+     $self->_close_bundle(@bundle); @bundle = ();
+ }
+ 
++sub _check_bundling_possibility {
++    my $self = shift;
++    my @list = reverse @_;
++    while (my $e = shift @list) {
++        next if $e eq '(';
++        if ( lc($e) eq 'and' ) {
++            return undef;
++        }
++        elsif ( lc($e) eq 'or' ) {
++            return shift @list;
++        }
++        else {
++            die "boo";
++        }
++    }
++    return undef;
++}
++
+ =head2 ClausesToSQL
+ 
+ =cut
+-- 
+1.7.11.3
+

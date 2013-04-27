@@ -4,6 +4,13 @@ RTx('RT-Extension-rt_cpan_org');
 all_from        ('lib/RT/Extension/rt_cpan_org.pm');
 readme_from     ('lib/RT/Extension/rt_cpan_org.pm');
 
-requires        'Hook::LexWrap';
+requires_rt('4.0.0');
+
+# rt-cpan-export-db
+requires 'DBI';
+requires 'DBD::SQLite';
+requires 'IO::Compress::Gzip';
+requires 'File::Spec';
+requires 'File::Remove';
 
 WriteAll();
