@@ -1,0 +1,33 @@
+From db3e18a3c44abc2dabd435c349b4a279b4a8f294 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Mon, 6 May 2013 14:21:50 -0700
+Subject: [PATCH] Link the title of the ticket "People" box when
+ Watch/WatchAsAdminCc are granted
+
+---
+ share/html/Ticket/Elements/ShowSummary | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/share/html/Ticket/Elements/ShowSummary b/share/html/Ticket/Elements/ShowSummary
+index 48db922..7241268 100644
+--- a/share/html/Ticket/Elements/ShowSummary
++++ b/share/html/Ticket/Elements/ShowSummary
+@@ -60,7 +60,7 @@
+     &><& /Ticket/Elements/ShowCustomFields, Ticket => $Ticket &></&>
+ 
+     <&| /Widgets/TitleBox, title => loc('People'),
+-        (($can_modify || $can_modify_owner) ? (title_href => RT->Config->Get('WebPath')."/Ticket/ModifyPeople.html?id=".$Ticket->Id) : ()),
++        (($can_modify || $can_modify_owner || $can_modify_people) ? (title_href => RT->Config->Get('WebPath')."/Ticket/ModifyPeople.html?id=".$Ticket->Id) : ()),
+         class => 'ticket-info-people',
+     &><& /Ticket/Elements/ShowPeople, Ticket => $Ticket &></&>
+     <& /Ticket/Elements/ShowAttachments, Ticket => $Ticket, Attachments => $Attachments &>
+@@ -109,4 +109,6 @@ my $can_modify_cf = $Ticket->CurrentUserHasRight('ModifyCustomField');
+ my $can_modify_owner = $Ticket->CurrentUserHasRight('OwnTicket')
+                     || $Ticket->CurrentUserHasRight('TakeTicket')
+                     || $Ticket->CurrentUserHasRight('StealTicket');
++my $can_modify_people = $Ticket->CurrentUserHasRight('Watch')
++                     || $Ticket->CurrentUserHasRight('WatchAsAdminCc');
+ </%INIT>
+-- 
+1.8.2.2
+
