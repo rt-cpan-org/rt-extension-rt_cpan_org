@@ -1,0 +1,49 @@
+From 27fefc1a018b9a06a144e441bed7095c2ca4b7d1 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Tue, 7 May 2013 12:12:20 -0700
+Subject: [PATCH] RT::CurrentUser objects should access Attributes as an
+ RT::User
+
+Otherwise attributes on the user object aren't found when accessed via
+an equivalent current user object.
+
+A larger, more invasive 4.2 fix for this should be introducing an
+_ObjectType method or similar which is provided by the superclass and
+used instead of ref().
+---
+ lib/RT/Attribute.pm  | 2 +-
+ lib/RT/Attributes.pm | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/lib/RT/Attribute.pm b/lib/RT/Attribute.pm
+index a0edb15..4350df0 100644
+--- a/lib/RT/Attribute.pm
++++ b/lib/RT/Attribute.pm
+@@ -148,7 +148,7 @@ sub Create {
+ 		  @_);
+ 
+     if ($args{Object} and UNIVERSAL::can($args{Object}, 'Id')) {
+-	    $args{ObjectType} = ref($args{Object});
++	    $args{ObjectType} = $args{Object}->isa("RT::CurrentUser") ? "RT::User" : ref($args{Object});
+ 	    $args{ObjectId} = $args{Object}->Id;
+     } else {
+         return(0, $self->loc("Required parameter '[_1]' not specified", 'Object'));
+diff --git a/lib/RT/Attributes.pm b/lib/RT/Attributes.pm
+index 9c18c1a..997e376 100644
+--- a/lib/RT/Attributes.pm
++++ b/lib/RT/Attributes.pm
+@@ -210,7 +210,10 @@ sub LimitToObject {
+     unless (eval { $obj->id} ){
+         return undef;
+     }
+-    $self->Limit(FIELD => 'ObjectType', OPERATOR=> '=', VALUE => ref($obj), ENTRYAGGREGATOR => 'OR');
++
++    my $type = $obj->isa("RT::CurrentUser") ? "RT::User" : ref($obj);
++
++    $self->Limit(FIELD => 'ObjectType', OPERATOR=> '=', VALUE => $type, ENTRYAGGREGATOR => 'OR');
+     $self->Limit(FIELD => 'ObjectId', OPERATOR=> '=', VALUE => $obj->id, ENTRYAGGREGATOR => 'OR', QUOTEVALUE => 0);
+ 
+ }
+-- 
+1.8.2.2
+
