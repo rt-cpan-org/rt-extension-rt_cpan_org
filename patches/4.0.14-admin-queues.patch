@@ -1,0 +1,26 @@
+From 944109e78909187e4427557380f16f34a93c9727 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Tue, 14 May 2013 15:27:19 -0700
+Subject: [PATCH] Limit the Admin Queues list to 50 rows per page by default
+
+Otherwise instances with a large number of queues take forever to load
+and display (such as rt.cpan.org).
+---
+ share/html/Admin/Queues/index.html | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/share/html/Admin/Queues/index.html b/share/html/Admin/Queues/index.html
+index 7f26702..2092230 100644
+--- a/share/html/Admin/Queues/index.html
++++ b/share/html/Admin/Queues/index.html
+@@ -58,6 +58,7 @@
+ <& /Elements/CollectionList,
+     OrderBy => 'Name',
+     Order => 'ASC',
++    Rows => 50,
+     %ARGS,
+     Format => $Format,
+     Collection => $queues,
+-- 
+1.8.2.2
+
