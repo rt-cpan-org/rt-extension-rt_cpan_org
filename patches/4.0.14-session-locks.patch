@@ -1,0 +1,147 @@
+From 5ab23daca4db2ef54fb5973b0b7b886a299a9e18 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Thu, 16 May 2013 01:08:06 -0700
+Subject: [PATCH 1/2] Correct a misspelling in log messages
+
+---
+ lib/RT/Interface/Web/Session.pm | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/RT/Interface/Web/Session.pm b/lib/RT/Interface/Web/Session.pm
+index 4edd9bd..ddbcef5 100644
+--- a/lib/RT/Interface/Web/Session.pm
++++ b/lib/RT/Interface/Web/Session.pm
+@@ -192,7 +192,7 @@ sub _ClearOldDB {
+         die "couldn't execute query: ". $dbh->errstr unless defined $rows;
+     }
+ 
+-    $RT::Logger->info("successfuly deleted $rows sessions");
++    $RT::Logger->info("successfully deleted $rows sessions");
+     return;
+ }
+ 
+@@ -222,7 +222,7 @@ sub _ClearOldDir {
+             next;
+         }
+         tied(%session)->delete;
+-        $RT::Logger->info("successfuly deleted session '$id'");
++        $RT::Logger->info("successfully deleted session '$id'");
+     }
+ 
+     my $lock = Apache::Session::Lock::File->new;
+@@ -259,7 +259,7 @@ sub ClearByUser {
+             }
+         }
+         tied(%session)->delete;
+-        $RT::Logger->info("successfuly deleted session '$id'");
++        $RT::Logger->info("successfully deleted session '$id'");
+     }
+ }
+ 
+-- 
+1.8.2.2
+
+
+From 125848b02327cf5f3f23084d786a8a8a8c127e85 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Thu, 16 May 2013 01:25:34 -0700
+Subject: [PATCH 2/2] Clean orphaned session file locks more aggressively
+
+When using file-based sessions, lock files are orphaned once the session
+is deleted through any call to tied(%session)->delete, such as logging
+out.  These lock files continue to accumulate until the session cleaner
+eventually picks them after a set age.
+
+Over the course of even a relatively short, and common, 7 day max age
+limit, the accumulated orphaned locks on a busy site (combined with all
+the active sessions + locks) can bloat the size of the session directory
+beyond the capacity of a standard ext3/4 filesystem directory entry.
+Once this happens, sessions will start to fail sporadically with "No
+space left on device" errors, despite plenty of disk space being
+available.
+
+Once a lock file is orphaned, it is safe to delete regardless of its
+age.  Aggressively remove such locks whenever the session cleaner runs.
+
+Arguably this should be handled inside Apache::Session when ->delete is
+called.  Until then, the extra cleaning is simple to implement.
+---
+ lib/RT/Interface/Web/Session.pm | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/lib/RT/Interface/Web/Session.pm b/lib/RT/Interface/Web/Session.pm
+index ddbcef5..0d70ac7 100644
+--- a/lib/RT/Interface/Web/Session.pm
++++ b/lib/RT/Interface/Web/Session.pm
+@@ -225,12 +225,50 @@ sub _ClearOldDir {
+         $RT::Logger->info("successfully deleted session '$id'");
+     }
+ 
++    # Apache::Session::Lock::File will clean out locks older than X, but it
++    # leaves around bogus locks if they're too new, even though they're
++    # guaranteed dead.  On even just largeish installs, the accumulated number
++    # of them may bump into ext3/4 filesystem limits since Apache::Session
++    # doesn't use a fan-out tree.
+     my $lock = Apache::Session::Lock::File->new;
+     $lock->clean( $dir, $older_than );
+ 
++    # Take matters into our own hands and clear bogus locks hanging around
++    # regardless of how recent they are.
++    $self->ClearOrphanLockFiles($dir);
++
+     return;
+ }
+ 
++=head3 ClearOrphanLockFiles
++
++Takes a directory in which to look for L<Apache::Session::Lock::File> locks
++which no longer have a corresponding session file.  If not provided, the
++directory is taken from the session configuration data.
++
++=cut
++
++sub ClearOrphanLockFiles {
++    my $class = shift;
++    my $dir   = shift || $class->Attributes->{Directory}
++        or return;
++
++    if (opendir my $dh, $dir) {
++        for (readdir $dh) {
++            next unless /^Apache-Session-([0-9a-f]{32})\.lock$/;
++            next if -e "$dir/$1";
++
++            RT->Logger->debug("deleting orphaned session lockfile '$_'");
++
++            unlink "$dir/$_"
++                or warn "Failed to unlink session lockfile $dir/$_: $!";
++        }
++        closedir $dh;
++    } else {
++        warn "Unable to open directory '$dir' for reading: $!";
++    }
++}
++
+ =head3 ClearByUser
+ 
+ Checks all sessions and if user has more then one session
+@@ -243,6 +281,7 @@ sub ClearByUser {
+     my $class = $self->Class;
+     my $attrs = $self->Attributes;
+ 
++    my $deleted;
+     my %seen = ();
+     foreach my $id( @{ $self->Ids } ) {
+         my %session;
+@@ -260,7 +299,9 @@ sub ClearByUser {
+         }
+         tied(%session)->delete;
+         $RT::Logger->info("successfully deleted session '$id'");
++        $deleted++;
+     }
++    $self->ClearOrphanLockFiles if $deleted;
+ }
+ 
+ sub TIEHASH {
+-- 
+1.8.2.2
+
