@@ -1,7 +1,65 @@
+From 75d7f3a267e2a92751b63e11e4119405815479fc Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Mon, 29 Apr 2013 14:16:11 -0700
+Subject: [PATCH 1/2] Error handling for text and HTML quote extraction when
+ displaying attachments
+
+Improves the error message by adding the attachment ID and directs bug
+reports to rt-bugs@bestpractical.com.
+---
+ .../Ticket/Elements/ShowTransactionAttachments     | 24 ++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/share/html/Ticket/Elements/ShowTransactionAttachments b/share/html/Ticket/Elements/ShowTransactionAttachments
+index 9ff6d10..f70f279 100644
+--- a/share/html/Ticket/Elements/ShowTransactionAttachments
++++ b/share/html/Ticket/Elements/ShowTransactionAttachments
+@@ -216,8 +216,17 @@ my $render_attachment = sub {
+                     ticket  => $Ticket,
+                 );
+ 
+-                require HTML::Quoted;
+-                $content = HTML::Quoted->extract($content) unless length $name;
++                unless (length $name) {
++                    eval {
++                        require HTML::Quoted;
++                        $content = HTML::Quoted->extract($content)
++                    };
++                    if ($@) {
++                        RT->Logger->error(
++                            "HTML::Quoted couldn't process attachment #@{[$message->id]}: $@."
++                          . "  This is a bug, please report it to rt-bugs\@bestpractical.com.");
++                    }
++                }
+ 
+                 $m->comp(
+                     'ShowMessageStanza',
+@@ -235,8 +244,15 @@ my $render_attachment = sub {
+             # It's a text type we don't have special handling for
+             else {
+                 unless ( length $name ) {
+-                    eval { require Text::Quoted;  $content = Text::Quoted::extract($content); };
+-                    if ($@) { $RT::Logger->warning( "Text::Quoted failed: $@" ) }
++                    eval {
++                        require Text::Quoted;
++                        $content = Text::Quoted::extract($content);
++                    };
++                    if ($@) {
++                        RT->Logger->error(
++                            "Text::Quoted couldn't process attachment #@{[$message->id]}: $@."
++                          . "  This is a bug, please report it to rt-bugs\@bestpractical.com.");
++                    }
+                 }
+ 
+                 $m->comp(
+-- 
+1.8.2.2
+
+
 From 9299787baa49b7d824d82bd584b628a6fc253c0b Mon Sep 17 00:00:00 2001
 From: Thomas Sibley <trs@bestpractical.com>
 Date: Thu, 16 May 2013 14:50:09 -0700
-Subject: [PATCH] Only treat ">" as an email quoting character
+Subject: [PATCH 2/2] Only treat ">" as an email quoting character
 
 All of the other defaults (!, #, %, =, |, :) cause too many false
 positives and hardly any true use as a quote character.
