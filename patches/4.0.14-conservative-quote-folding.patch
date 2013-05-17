@@ -1,0 +1,28 @@
+From 9299787baa49b7d824d82bd584b628a6fc253c0b Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Thu, 16 May 2013 14:50:09 -0700
+Subject: [PATCH] Only treat ">" as an email quoting character
+
+All of the other defaults (!, #, %, =, |, :) cause too many false
+positives and hardly any true use as a quote character.
+---
+ share/html/Ticket/Elements/ShowTransactionAttachments | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/share/html/Ticket/Elements/ShowTransactionAttachments b/share/html/Ticket/Elements/ShowTransactionAttachments
+index f70f279..b219205 100644
+--- a/share/html/Ticket/Elements/ShowTransactionAttachments
++++ b/share/html/Ticket/Elements/ShowTransactionAttachments
+@@ -246,6 +246,9 @@ my $render_attachment = sub {
+                 unless ( length $name ) {
+                     eval {
+                         require Text::Quoted;
++                        # XXX: Deprecate ->can check in 4.2 and simply bump version requirement.
++                        Text::Quoted::set_quote_characters(undef) # only use >
++                            if Text::Quoted->can("set_quote_characters");
+                         $content = Text::Quoted::extract($content);
+                     };
+                     if ($@) {
+-- 
+1.8.2.2
+
