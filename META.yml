@@ -25,6 +25,8 @@ requires:
   File::Remove: 0
   File::Spec: 0
   IO::Compress::Gzip: 0
+  JSON: 0
+  JSON::XS: 0
   perl: 5.8.3
 resources:
   license: http://opensource.org/licenses/gpl-license.php

@@ -12,5 +12,7 @@ requires 'DBD::SQLite';
 requires 'IO::Compress::Gzip';
 requires 'File::Spec';
 requires 'File::Remove';
+requires 'JSON';
+requires 'JSON::XS';
 
 WriteAll();
