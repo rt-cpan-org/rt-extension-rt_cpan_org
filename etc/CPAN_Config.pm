@@ -21,7 +21,8 @@ Set( $UsernameFormat, 'public' );
 Set( $CorrespondAddress, 'bugs@rt.cpan.org' );
 Set( $CommentAddress,    'comments@rt.cpan.org' );
 
-# The old $rtname used to be "cpan"; accept it
+# The old $rtname used to be "cpan"; accept it.
+# See also BugTracker_Config.pm which extends this variable.
 Set( $EmailSubjectTagRegex, qr/(?:\Q$rtname\E|cpan)/i );
 
 # Too many deep links into rt.cpan.org.
