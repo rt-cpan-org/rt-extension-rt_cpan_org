@@ -58,6 +58,7 @@ my @UPDATE = qw{
     RT-Extension-Utils
     CPAN2RT
     RT-Extension-CustomizeContentType
+    RTx-RemoteLinks
 };
 
 my %REPOS = (
@@ -73,6 +74,7 @@ my %REPOS = (
     'RT-Extension-ReportSpam'  => 'git://github.com/bestpractical/rt-extension-reportspam.git',
     'RT-Extension-Utils'       => 'git://github.com/bestpractical/rt-extension-utils.git',
     'RT-Extension-CustomizeContentType' => 'git://github.com/bestpractical/rt-extension-customizecontenttype.git',
+    'RTx-RemoteLinks'          => 'git://github.com/bestpractical/rtx-remotelinks.git',
 );
 
 my $tmp_dir = tempdir( "pull-live-XXXXX", TMPDIR => 1, CLEANUP => 1 )

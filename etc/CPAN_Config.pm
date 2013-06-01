@@ -164,4 +164,9 @@ Set(%ContentTypes,
     "pod"   => "text/x-pod",
 );
 
+# Easy linking to rt.perl.org tickets
+Set(%RemoteLinks,
+    perl => 'https://rt.perl.org/rt3',
+);
+
 1;
