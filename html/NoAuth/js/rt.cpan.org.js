@@ -11,7 +11,9 @@ jQuery(function(){
         parent.innerHTML = parent.innerHTML.replace(/\[\]/,"");
     });
 
-    jQuery("select[multiple], select[size]").resizable({ handles: "s" });
+    jQuery("form:not([name^=SelectionBox]) select[multiple], "
+         + "form:not([name^=SelectionBox]) select[size]")
+         .resizable({ handles: "s" });
 
     jQuery("input[data-autocomplete=Queues]").each(function() {
         var input = jQuery(this);
