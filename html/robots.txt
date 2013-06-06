@@ -47,6 +47,19 @@
 %# END BPS TAGGED BLOCK }}}
 <%init>$r->content_type('text/plain');</%init>
 User-agent: *
-Disallow: /
+Disallow: /Admin/
+Disallow: /Approvals/
+Disallow: /Articles/
+Disallow: /Download/
+Disallow: /Helpers/
+Disallow: /Install/
+Disallow: /m/
+Disallow: /Prefs/
+Disallow: /REST/
+Disallow: /Search/
+Disallow: /SelfService/
+Disallow: /Tools/
+Disallow: /User/
+Disallow: /Widgets/
 
 % $m->abort;
