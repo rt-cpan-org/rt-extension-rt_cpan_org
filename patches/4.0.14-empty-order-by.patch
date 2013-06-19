@@ -1,0 +1,30 @@
+From 1fdfabc9606dacf82535d52edbcdd98b6bbbc444 Mon Sep 17 00:00:00 2001
+From: Thomas Sibley <trs@bestpractical.com>
+Date: Tue, 18 Jun 2013 17:03:26 -0700
+Subject: [PATCH] Always filter empty strings out of OrderBy
+
+Older OrderBy saved search preferences (which are arrays) may contain
+empty strings.  Passing them to OrderByCols() can cause invalid SQL.
+---
+ share/html/Elements/CollectionList | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/share/html/Elements/CollectionList b/share/html/Elements/CollectionList
+index 7e4ba15..33e2de2 100644
+--- a/share/html/Elements/CollectionList
++++ b/share/html/Elements/CollectionList
+@@ -68,9 +68,10 @@ if ( $Rows ) {
+ # collection is ordered or not
+ if ( @OrderBy && ($AllowSorting || !$Collection->{'order_by'}) ) {
+     if ( $OrderBy[0] =~ /\|/ ) {
+-        @OrderBy = grep length($_), split /\|/, $OrderBy[0];
++        @OrderBy = split /\|/, $OrderBy[0];
+         @Order = split /\|/,$Order[0];
+     }
++    @OrderBy = grep length, @OrderBy;
+     $Collection->OrderByCols(
+         map { { FIELD => $OrderBy[$_], ORDER => $Order[$_] } }
+         ( 0 .. $#OrderBy )
+-- 
+1.8.3.1
+
