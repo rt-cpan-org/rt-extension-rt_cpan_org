@@ -1,6 +1,7 @@
 <p style="margin-top: 0">
   This site tracks bugs in every distribution released through
-  <a href="http://cpan.org">CPAN</a>.
+  <a href="http://cpan.org">CPAN</a>.  All bug reports are
+  publicly visible on this site.
 </p>
 
 <h2>Want to...</h2>
@@ -26,7 +27,7 @@
   "&lt;distribution-name&gt;" is something like DBIx-SearchBuilder or
   Class-DBI or Acme-Current-Forever. Use
   <a href="<% RT->Config->Get("WebPath") %>/Public/">search</a> to find name of
-  a distribution.
+  a distribution.  Any mail you send will be publicly visible on the web.
 </p>
 
 <h2>... reply to an existing bug via email?</h2>
