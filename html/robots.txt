@@ -61,5 +61,6 @@ Disallow: /SelfService/
 Disallow: /Tools/
 Disallow: /User/
 Disallow: /Widgets/
+Disallow: /Ticket/Attachment/
 
 % $m->abort;
