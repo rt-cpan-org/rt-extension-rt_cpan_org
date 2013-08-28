@@ -89,7 +89,8 @@ sub write_tsv {
 
 sub write_json {
     my $data = shift;
+    my %data = map {; $_->{dist} => $_ } @$data;
     open my $fh,  ">", $json or die "unable to open $json for writing: $!";
-    print { $fh } encode_json($data), "\n";
+    print { $fh } encode_json(\%data), "\n";
     close $fh or die "couldn't close $json: $!";
 }
