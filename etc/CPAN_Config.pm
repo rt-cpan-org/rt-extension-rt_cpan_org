@@ -38,6 +38,9 @@ Set( @Active_MakeClicky, qw(httpurl_overwrite) );
 # Fancy-pants WYSIWYG usually mangles pasted terminal and log output.
 Set( $MessageBoxRichText, 0 );
 
+# The "more about requestors" is generally very useful
+Set($ShowMoreAboutPrivilegedUsers, 1);
+
 # Show severity, broken in, and fixed in by default.
 Set( $DefaultSearchResultFormat, <<'EOT');
 '<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:ID',
