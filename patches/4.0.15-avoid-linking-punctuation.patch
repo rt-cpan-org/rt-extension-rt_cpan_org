@@ -1,7 +1,7 @@
 From 2c8ed76665d5536df7d76bdb10a7f2dee92b8082 Mon Sep 17 00:00:00 2001
 From: Thomas Sibley <trs@bestpractical.com>
 Date: Mon, 22 Jul 2013 22:29:13 -0700
-Subject: [PATCH] Avoid linking trailing punctuation in MakeClicky
+Subject: [PATCH] Avoid linking trailing punctuation and HTML in MakeClicky
 
 ---
  share/html/Elements/MakeClicky | 4 ++--
@@ -16,13 +16,13 @@ index dabe3bb..854c93c 100644
      {
          name   => "httpurl",
 -        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#\S+)?/,
-+        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#\S+)?(?<![.?!,;:])/,
++        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#[^\s<]+)?(?<![.?!,;:])/,
          action => "url",
      },
      {
          name   => "httpurl_overwrite",
 -        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#\S+)?/,
-+        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#\S+)?(?<![.?!,;:])/,
++        regex  => qr/$RE{URI}{HTTP}{-keep}{-scheme => 'https?'}(?:#[^\s<]+)?(?<![.?!,;:])/,
          action => "url_overwrite",
      },
  );
