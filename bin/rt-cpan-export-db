@@ -91,6 +91,7 @@ exit(0);
 my $count = 0;
 sub insert_ticket {
     my %col = @_;
+    $col{subject} = '' unless defined $col{subject};
     $dbh->do("INSERT INTO ticket ( id, distribution, subject, status, severity, created, updated ) VALUES ( ?, ?, ?, ?, ?, ?, ? )", {},
         $col{id},
         $col{distribution},
