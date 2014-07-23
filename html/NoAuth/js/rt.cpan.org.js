@@ -46,7 +46,7 @@ jQuery(function(){
                 // Adaptive autocomplete!  If the term contains a colon, look
                 // for modules and map to distributions via metacpan.
                 this_request = current_request = jQuery.ajax({
-                    url: "http://api.metacpan.org/v0/search/autocomplete",
+                    url: "https://api.metacpan.org/v0/search/autocomplete",
                     dataType: "json",
                     data: {
                         q: request.term
