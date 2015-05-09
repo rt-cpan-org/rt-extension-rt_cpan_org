@@ -1,8 +1,7 @@
 use inc::Module::Install;
 
 RTx('RT-Extension-rt_cpan_org');
-all_from        ('lib/RT/Extension/rt_cpan_org.pm');
-readme_from     ('lib/RT/Extension/rt_cpan_org.pm');
+repository('https://github.com/rt-cpan-org/rt-extension-rt_cpan_org');
 
 requires_rt('4.0.14');
 
@@ -15,4 +14,5 @@ requires 'File::Remove';
 requires 'JSON';
 requires 'JSON::XS';
 
+sign();
 WriteAll();

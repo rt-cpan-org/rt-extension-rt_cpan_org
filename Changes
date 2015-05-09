@@ -1,3 +1,9 @@
-0.02 Wed Mar 5 13:36:42 UTC 2008
+4.01 2015-05-09
+ - Updated packaging
 
-    * intial release to the CPAN
+4.0 2013-04-26
+ - RT 4.0 compatibility
+ - (other changes after that date without increasing version number)
+
+0.02 2008-03-05
+ - intial release to the CPAN

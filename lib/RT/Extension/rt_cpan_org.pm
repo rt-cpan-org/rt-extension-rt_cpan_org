@@ -52,7 +52,7 @@ use warnings;
 
 package RT::Extension::rt_cpan_org;
 
-our $VERSION = '4.0';
+our $VERSION = '4.01';
 
 =head1 NAME
 
@@ -96,11 +96,15 @@ package RT::Extension::rt_cpan_org;
 
 =head1 AUTHOR
 
-Thomas Sibley E<lt>trs@bestpractical.comE<gt>
+Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
 
-=head1 LICENSE
+=head1 LICENSE AND COPYRIGHT
 
-GPL version 2.
+This software is Copyright (c) 2014 by Best Practical Solutions
+
+This is free software, licensed under:
+
+  The GNU General Public License, Version 2, June 1991
 
 =cut
 
