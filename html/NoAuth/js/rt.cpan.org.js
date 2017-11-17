@@ -46,19 +46,19 @@ jQuery(function(){
                 // Adaptive autocomplete!  If the term contains a colon, look
                 // for modules and map to distributions via metacpan.
                 this_request = current_request = jQuery.ajax({
-                    url: "https://fastapi.metacpan.org/v1/search/autocomplete",
+                    url: "https://fastapi.metacpan.org/v1/search/autocomplete/suggest",
                     dataType: "json",
                     data: {
                         q: request.term
                     },
                     success: function( data ) {
-                        if (!data || data.timed_out || !data.hits || this_request !== current_request)
+                        if (!data || !data.suggestions || !data.suggestions.length || this_request !== current_request)
                             return;
 
-                        response( jQuery.map( data.hits.hits, function( item ) {
+                        response( jQuery.map( data.suggestions.slice(1, 12), function( item ) {
                             return {
-                                label: item.fields.documentation,
-                                value: item.fields.distribution,
+                                label: item.name,
+                                value: item.distribution,
                                 module: true
                             }
                         }));
