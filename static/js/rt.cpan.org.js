@@ -11,10 +11,6 @@ jQuery(function(){
         parent.innerHTML = parent.innerHTML.replace(/\[\]/,"");
     });
 
-    jQuery("form:not([name^=SelectionBox]):not([name^=Dashboard-Searches]) select[multiple], "
-         + "form:not([name^=SelectionBox]):not([name^=Dashboard-Searches]) select[size]")
-         .resizable({ handles: "s" });
-
     jQuery("input[data-autocomplete=Queues]").each(function() {
         var input = jQuery(this);
         var opts = {
