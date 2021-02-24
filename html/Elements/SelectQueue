@@ -59,4 +59,4 @@ $DefaultQueue->Load( $Default );
 
 undef $CheckQueueRight if $ShowAllQueues;
 </%init>
-<input name="<% $Name %>" size="25" placeholder="<% loc("Module or distribution") %>" value="<% $DefaultQueue->id ? $DefaultQueue->Name : "" %>" class="<% $Class %>" data-autocomplete="Queues" data-autocomplete-autosubmit=1 data-autocomplete-params="right=<% $CheckQueueRight || '' |u %>" />
+<input name="<% $Name %>" size="25" placeholder="<% loc("Module or distribution") %>" value="<% $DefaultQueue->id ? $DefaultQueue->Name : "" %>" class="form-control <% $Class %>" data-autocomplete="Queues" data-autocomplete-autosubmit=1 data-autocomplete-params="right=<% $CheckQueueRight || '' |u %>" />

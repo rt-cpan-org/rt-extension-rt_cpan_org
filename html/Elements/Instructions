@@ -1,4 +1,4 @@
-<p style="margin-top: 0">
+<p class="mt-2">
   This site tracks bugs in every distribution released through
   <a href="http://cpan.org">CPAN</a>.  All bug reports are
   publicly visible on this site.

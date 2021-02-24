@@ -9,28 +9,6 @@
     font-size: 0.9em;
 }
 
-#rtcpan-explanation, #rtcpan-login {
-    width: 50%;
-    float: left;
-    margin: 0;
-    padding: 0;
-}
-
-@media(max-width: 650px) {
-    #rtcpan-explanation, #rtcpan-login {
-        width: auto;
-        float: none;
-    }
-}
-
-#login-box {
-    width: 90%;
-}
-
-#rtcpan-explanation {
-    margin-bottom: 3em;
-}
-
 .rtcpan-news {
     border: 1px solid #f90;
     background: #ffffa3;
@@ -61,15 +39,8 @@ tt {
 }
 
 #contact-info, #sponsors {
-    color: white;
-    text-shadow: 1px 1px #444;
-    padding: 1em 1em 0 0;
-    margin: 0;
-    text-align: right;
     font-size: 1.1em;
 }
-
-#contact-info a, #sponsors a { color: white }
 
 a { text-decoration: underline; }
 
@@ -86,6 +57,3 @@ a { text-decoration: underline; }
 .select-queue.ui-autocomplete-input {
     padding-right: 20px;  /* don't type under the spinner */
 }
-
-#topactions input[name=q], #topactions .select-queue { width: 10em; }
-#topactions button, #topactions input[type=submit], #topactions .button { width: auto }
