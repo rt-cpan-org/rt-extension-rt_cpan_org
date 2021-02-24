@@ -21,8 +21,7 @@ jQuery(function(){
             minLength: 2,
             delay: 100
         };
-        var rt_source = <% RT->Config->Get('WebPath') |n,j%>
-                      + "/Helpers/Autocomplete/Queues?max=20";
+        var rt_source = RT.Config.WebPath + "/Helpers/Autocomplete/Queues?max=20";
 
         if (input.attr("data-autocomplete-params") != null)
             rt_source += "&" + input.attr("data-autocomplete-params");
