@@ -80,7 +80,7 @@ a { text-decoration: underline; }
 }
 
 .ui-autocomplete-loading {
-    background: url(../../static/images/jquery_ui/ui-anim_basic_16x16.gif) right center no-repeat;
+    background: url(../../static/images/ui-anim_basic_16x16.gif) right center no-repeat;
 }
 
 .select-queue.ui-autocomplete-input {
