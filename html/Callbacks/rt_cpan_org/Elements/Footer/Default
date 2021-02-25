@@ -1,9 +1,8 @@
 <div class="row mx-2 mt-3">
   <div class="col-12 text-right">
     <p id="sponsors">
-      This service is sponsored and maintained by
-      <a href="http://bestpractical.com">Best Practical Solutions</a> and runs on
-      <a href="http://noc.perl.org">Perl.org</a> infrastructure.
+      This service runs on <a href="https://bestpractical.com/request-tracker">Request Tracker</a>, is sponsored by <a href="https://www.perlfoundation.org/">The Perl foundation</a>, and maintained by
+      <a href="http://bestpractical.com">Best Practical Solutions</a>.
     </p>
     <& /Elements/ContactInfo &>
   </div>
