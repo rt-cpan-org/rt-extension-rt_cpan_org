@@ -15,21 +15,6 @@
     padding: 0.5em;
 }
 
-.dist-list { width: 100%; overflow: hidden; }
-
-.dist-list ul {
-    list-style: none;
-    margin-left: 0;
-    padding-left: 0;
-    padding-bottom: 3em;
-    width: 50%;
-    float: left;
-}
-
-.dist-list ul strong {
-    padding-right: 1em;
-}
-
 .dist-list ul .dist-actions {
     font-size: 0.9em;
 }
