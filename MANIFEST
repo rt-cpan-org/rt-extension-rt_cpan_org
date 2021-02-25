@@ -13,6 +13,7 @@ etc/user-activity-queries/04-status-change-recently.sql
 etc/user-activity-queries/05-watched-ticket-recently.sql
 html/Callbacks/rt_cpan_org/Dist/Elements/ShowNotes/Top
 html/Callbacks/rt_cpan_org/Elements/Footer/Default
+html/Callbacks/rt_cpan_org/Elements/JavascriptConfig/Data
 html/Callbacks/rt_cpan_org/Elements/Login/AfterForm
 html/Callbacks/rt_cpan_org/Elements/Login/BeforeForm
 html/Callbacks/rt_cpan_org/Elements/MakeClicky/Default
@@ -21,23 +22,14 @@ html/Callbacks/rt_cpan_org/Elements/QueueSummaryByLifecycle/SQLFilter
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByStatus/LinkBuilders
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByStatus/SQLFilter
 html/Callbacks/rt_cpan_org/Elements/Tabs/Privileged
-html/Callbacks/rt_cpan_org/Prefs/Quicksearch.html/ModifyQueues
+html/Callbacks/rt_cpan_org/Prefs/QueueList.html/ModifyQueues
 html/Callbacks/rt_cpan_org/Search/Simple.html/ModifyQuery
 html/Callbacks/rt_cpan_org/Ticket/Create.html/Init
 html/Callbacks/rt_cpan_org/Ticket/Elements/ShowTransaction/ModifyDisplay
 html/Elements/ContactInfo
 html/Elements/Instructions
-html/Elements/SelectQueue
-html/Elements/SimpleSearch
-html/Helpers/Autocomplete/Queues
 html/NoAuth/cpan/.placeholder
-html/NoAuth/css/jquery.ui.resizable.css
-html/NoAuth/css/rt.cpan.org.css
 html/NoAuth/dhandler
-html/NoAuth/images/cpan.png
-html/NoAuth/images/resize-handle.png
-html/NoAuth/js/jquery.ui.resizable.js
-html/NoAuth/js/rt.cpan.org.js
 html/NoAuth/RT/CPAN/About.html
 html/NoAuth/RT/CPAN/Usage.html
 html/Public/bugs-per-dist.json
@@ -63,5 +55,8 @@ lib/RT/Ticket_Vendor.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
-patches/4.0.15-link-people-box.patch
 README
+static/css/rt.cpan.org.css
+static/images/cpan.png
+static/images/ui-anim_basic_16x16.gif
+static/js/rt.cpan.org.js
