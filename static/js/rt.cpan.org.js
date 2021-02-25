@@ -13,6 +13,8 @@ jQuery(function(){
 
     jQuery("input[data-autocomplete=Queues]").each(function() {
         var input = jQuery(this);
+        input.attr('placeholder', RT.I18N.Catalog.module_or_dist);
+        input.addClass('form-control'); // RT 5.0.1 lacks this class
         var opts = {
             minLength: 2,
             delay: 100
@@ -26,7 +28,9 @@ jQuery(function(){
         if (input.attr("data-autocomplete-autosubmit")) {
             opts.select = function( event, ui ) {
                 jQuery(event.target).val(ui.item.value);
-                jQuery(event.target).closest("form").submit();
+                var form = jQuery(event.target).closest("form");
+                form.find('input[name=QueueChanged]').val(1);
+                form.submit();
             };
         }
 
@@ -50,6 +54,9 @@ jQuery(function(){
                         if (!data || data.timed_out || !data.hits || this_request !== current_request)
                             return;
 
+                        // cancelled requests when switching to the other
+                        // source make .ui-autocomplete-loading live forever
+                        input.removeClass('ui-autocomplete-loading');
                         response( jQuery.map( data.hits.hits, function( item ) {
                             return {
                                 label: item.fields.documentation,
@@ -68,8 +75,12 @@ jQuery(function(){
                         term: request.term
                     },
                     success: function( data ) {
-                        if (data && this_request === current_request)
+                        if (data && this_request === current_request) {
+                            // cancelled requests when switching to the other
+                            // source make .ui-autocomplete-loading live forever
+                            input.removeClass('ui-autocomplete-loading');
                             response(data);
+                        }
                     }
                 });
             }
