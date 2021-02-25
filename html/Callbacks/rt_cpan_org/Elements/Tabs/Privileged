@@ -6,10 +6,6 @@ if (my $actions = PageMenu->child("actions")) {
     $actions->delete("extract-article");
 }
 
-if (Menu->child("search")) {
-    Menu->child("search")->title(loc("Search Tickets"));
-}
-
 if (Menu->child("tools")) {
     Menu->child("tools")->delete("articles") unless $session{CurrentUser}->HasRight(
         Object  => RT->System,
