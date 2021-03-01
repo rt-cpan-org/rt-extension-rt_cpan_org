@@ -1,11 +1,11 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use lib '/opt/rt5/local/lib', '/opt/rt5/lib';
 
 use List::Util "sum";
 use JSON "encode_json";
 
-eval { require RT; 1 } or usage($@);
 my $output = shift or usage("No output directory specified");
 
 usage("Output directory '$output' doesn't exist!")
@@ -13,12 +13,6 @@ usage("Output directory '$output' doesn't exist!")
 
 my $tsv  = "$output/bugs-per-dist.data";
 my $json = "$output/bugs-per-dist.data-json";
-
-sub usage {
-    print STDERR @_, "\n\n" if @_;
-    print STDERR "usage: perl -I /opt/rt4/local/lib -I/opt/rt4/lib $0 output-dir\n";
-    exit 1;
-}
 
 RT::LoadConfig();
 RT::Init();
@@ -30,7 +24,7 @@ $dbh->{RaiseError} = 1;
 
 my $query = q{
     SELECT q.Name, t.Status, count(1)
-    FROM Queues q STRAIGHT_JOIN Tickets t 
+    FROM Queues q, Tickets t 
     WHERE
         t.Queue = q.id
         AND t.Type = ?

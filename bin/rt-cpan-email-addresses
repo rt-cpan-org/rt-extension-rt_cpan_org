@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-
-eval { require RT; 1 } or do {
-    print STDERR "$@\n\nusage: perl -I /opt/rt4/local/lib -I/opt/rt4/lib $0 > results.tsv\n";
-    exit 1;
-};
+use lib '/opt/rt5/local/lib', '/opt/rt5/lib';
 
 RT::LoadConfig();
 RT::Init();
