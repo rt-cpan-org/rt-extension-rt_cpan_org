@@ -1,12 +1,12 @@
-<p style="margin-top: 0">
+<p class="mt-2">
   This site tracks bugs in every distribution released through
   <a href="http://cpan.org">CPAN</a>.  All bug reports are
-  publicly visible on this site.
+  publicly visible on this site. If a distribution tracks it's bugs elsewhere, that will also be noted on the pages for that distribution here.
 </p>
 
-<h2>Want to...</h2>
+<h3>Want to...</h3>
 
-<h2>... find a distribution and browse its bugs?</h2>
+<h3>... find a distribution and browse its bugs?</h3>
 <p>
   This site lets you <a href="<% RT->Config->Get("WebPath") %>/Public/">search
   for distributions</a> by name or author.  When you've found the
@@ -14,54 +14,47 @@
   report new bugs.
 </p>
 
-<h2>... report a bug in a module using web-interface?</h2>
+<h3>... report a bug in a module using web-interface?</h3>
 <p>
-  Use <a href="https://www.bitcard.org/">Bitcard</a> or OpenID account.
-  Module authors can use PAUSE credentials.
+  Use one of the authentication options listed here to log in. Auth0 provides several options including Google and Github logins.
+  Module authors can use PAUSE credentials to manage their queues.
 </p>
 
-<h2>... report a bug in a module using email?</h2>
+<h3>... report a bug in a module using email?</h3>
 <p>
   To submit a bug report for a given distribution by email, send mail
   to <strong>bug-&lt;distribution-name&gt;@rt.cpan.org</strong>, where
   "&lt;distribution-name&gt;" is something like DBIx-SearchBuilder or
   Class-DBI or Acme-Current-Forever. Use
   <a href="<% RT->Config->Get("WebPath") %>/Public/">search</a> to find name of
-  a distribution.  Any mail you send will be publicly visible on the web.
+  a distribution.
 </p>
 
-<h2>... reply to an existing bug via email?</h2>
+<p class="font-weight-bold text-danger">Note: The contents of any email you send will be publicly visible on the web.</p>
+
+<h3>... reply to an existing bug via email?</h3>
 <p>
   Send email to the distribution email address (see above) with a tag like the
   following somewhere in the Subject: <strong>[rt.cpan.org #<em>NNNNN</em>]</strong>.
   Replace <em>NNNNN</em> with the existing bug number.
 </p>
 
-<h2>... report a bug in perl itself?</h2>
+<h3>... report a bug in perl itself?</h3>
 <p>
   To report bugs in perl itself, you're best off using the command-line
-  'perlbug' tool or <a href="http://rt.perl.org">rt.perl.org</a>.
+  'perlbug' tool or going to the <a href="https://github.com/Perl/perl5/issues">GitHub issue tracker</a>.
 </p>
 
-<h2>... manage bugs in your distributions?</h2>
+<h3>... manage bugs in your distributions?</h3>
 <p>
   To work with bugs, every module author with a
   <a href="http://pause.perl.org">PAUSE</a> account can log into
   rt.cpan.org with their PAUSE userid and password. If you can't log in or
-  distributions you maintain aren't listed, please write to
-  rt-cpan-admin@bestpractical.com at your earliest convenience.
+  distributions you maintain aren't listed, you can send email to
+  rt-cpan-admin@bestpractical.com.
 </p>
 
-<h2>... know more about this service?</h2>
+<h3>... know more about this service?</h3>
 <p>
-  Read <a href="<% RT->Config->Get("WebPath") %>/NoAuth/RT/CPAN/About.html">this document</a>.
-</p>
-
-<p>
-Enjoy,
-</p>
-
-<p class="over-and-out">
-  Jesse Vincent <br />
-  <a href="http://bestpractical.com/">Best Practical Solutions</a>, LLC
+  <a href="<% RT->Config->Get("WebPath") %>/NoAuth/RT/CPAN/About.html">Learn more about rt.cpan.org</a>.
 </p>

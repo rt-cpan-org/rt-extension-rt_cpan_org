@@ -1,9 +1,10 @@
+use lib '.';
 use inc::Module::Install;
 
 RTx('RT-Extension-rt_cpan_org');
 repository('https://github.com/rt-cpan-org/rt-extension-rt_cpan_org');
 
-requires_rt('4.0.14');
+requires_rt('5.0.0');
 
 # rt-cpan-export-db
 requires 'DBI';

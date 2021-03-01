@@ -8,7 +8,7 @@ configure_requires:
   ExtUtils::MakeMaker: 6.59
 distribution_type: module
 dynamic_config: 1
-generated_by: 'Module::Install version 1.14'
+generated_by: 'Module::Install version 1.19'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,6 +19,7 @@ no_index:
     - etc
     - html
     - inc
+    - static
 requires:
   DBD::SQLite: 0
   DBI: 0
@@ -27,10 +28,10 @@ requires:
   IO::Compress::Gzip: 0
   JSON: 0
   JSON::XS: 0
-  perl: 5.8.3
+  perl: 5.10.1
 resources:
   license: http://opensource.org/licenses/gpl-license.php
   repository: https://github.com/rt-cpan-org/rt-extension-rt_cpan_org
 version: '4.01'
-x_module_install_rtx_version: '0.37'
-x_requires_rt: 4.0.14
+x_module_install_rtx_version: '0.42'
+x_requires_rt: 5.0.0

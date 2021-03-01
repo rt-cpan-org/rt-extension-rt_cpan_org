@@ -1,0 +1,48 @@
+h3 {
+    font-size: 1.5rem;
+}
+
+#comp-Public-RT-CPAN-About #body {
+    margin-left: 12em;
+    margin-right: 12em;
+}
+
+.ticket-transaction .messagebody {
+    /*white-space: pre;*/
+    font-family: "Andale Mono", monospace;
+    font-size: 0.9em;
+}
+
+.rtcpan-news {
+    border: 1px solid #f90;
+    background: #ffffa3;
+    padding: 0.5em;
+}
+
+.dist-list ul .dist-actions {
+    font-size: 0.9em;
+}
+
+tt {
+    font-size: 1.2em;
+}
+
+#contact-info, #sponsors {
+    font-size: 1.1em;
+}
+
+a { text-decoration: underline; }
+
+#user-prefs-password { display: none }
+
+#page-navigation {
+    z-index: 99;
+}
+
+.ui-autocomplete-loading {
+    background: url(../../static/images/ui-anim_basic_16x16.gif) right center no-repeat;
+}
+
+.select-queue.ui-autocomplete-input {
+    padding-right: 20px;  /* don't type under the spinner */
+}

@@ -1,0 +1,7 @@
+<%INIT>
+$Catalog->{module_or_dist} = loc("Module or distribution");
+</%INIT>
+
+<%ARGS>
+$Catalog
+</%ARGS>

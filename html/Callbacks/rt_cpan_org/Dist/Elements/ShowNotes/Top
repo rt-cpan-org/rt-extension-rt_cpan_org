@@ -7,4 +7,4 @@ return if $Queue->Disabled;
 my $dist = $m->interp->apply_escapes($Queue->Name, 'h');
 my $dist_u = $m->interp->apply_escapes($Queue->Name, 'u', 'h');
 </%init>
-<p><&|/l_unsafe, $dist, qq[<a href="https://metacpan.org/release/$dist_u">], "</a>" &>This queue is for tickets about the [_2][_1] CPAN distribution[_3].</&></p>
+<p class="mt-2"><&|/l_unsafe, $dist, qq[<a href="https://metacpan.org/release/$dist_u">], "</a>" &>This queue is for tickets about the [_2][_1] CPAN distribution[_3].</&></p>

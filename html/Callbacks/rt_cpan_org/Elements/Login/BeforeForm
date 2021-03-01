@@ -45,11 +45,13 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<div class="clearfix">
-<div id="rtcpan-explanation">
-  <div class="wrapper">
-    <& /Elements/Instructions &>
+<div class="row">
+  <div class="col-md-6">
+    <div id="rtcpan-explanation" class="mt-2">
+      <div class="wrapper">
+        <& /Elements/Instructions &>
+      </div>
+    </div>
   </div>
-</div>
-
-<div id="rtcpan-login">
+  <div class="col-md-6">
+    <div id="rtcpan-login">

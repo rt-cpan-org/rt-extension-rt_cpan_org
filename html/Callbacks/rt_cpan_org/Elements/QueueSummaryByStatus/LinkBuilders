@@ -6,7 +6,7 @@ $link_status
 $$link_all = sub {
     my ($queue, $all_statuses) = @_; 
     return RT->Config->Get("WebPath") . '/Dist/Display.html'
-         . '?Status=Active'
+         . '?Status=__Active__'
          . '&Queue=' . $m->interp->apply_escapes($queue->{Name}, 'u');
 };
 

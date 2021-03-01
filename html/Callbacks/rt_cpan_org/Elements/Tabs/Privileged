@@ -6,13 +6,16 @@ if (my $actions = PageMenu->child("actions")) {
     $actions->delete("extract-article");
 }
 
-Menu->child("search")->title(loc("Search Tickets"));
-Menu->child("tools")->delete("articles") unless $session{CurrentUser}->HasRight(
-    Object  => RT->System,
-    Right   => 'ShowArticle',
-);
+if (Menu->child("tools")) {
+    Menu->child("tools")->delete("articles") unless $session{CurrentUser}->HasRight(
+        Object  => RT->System,
+        Right   => 'ShowArticle',
+    );
+};
 
-my $about = Menu->child("preferences")->add_before(
+# if it's guest user, we have "login"(i.e. "Log out guest user")
+my $pref_or_login = Menu->child("preferences") || Menu->child("login");
+my $about = $pref_or_login->add_before(
     "about",
     title   => loc("About rt.cpan.org"),
     path    => "/NoAuth/RT/CPAN/About.html",

@@ -5,20 +5,20 @@
 <div id="body">
 % }
 
-  <div id="rtcpan-about">
+  <div id="rtcpan-about" class="m-3 container-fluid">
  
-    <h2 style="margin-top: 0">What is this all about?</h2>
+    <h3 style="margin-top: 0">What is this all about?</h3>
     <p>
-      This site tracks bugs in every distribution released through
-      <a href="http://cpan.org">CPAN</a>.
+      This site provides a queue to track feature requests and bug reports in every distribution released through
+      <a href="http://cpan.org">CPAN</a>. Some distributions track issues elsewhere and that is noted here as well.
     </p>
 
     <p>
       See the <a href="Usage.html">quick usage guidelines</a> if you want to know how to use this site.  These guidelines are also on the login page.
     </p>
 
-    <h2>Recommendations (soft rules)</h2>
-    <h3>For reporters</h3>
+    <h3>Recommendations (soft rules)</h3>
+    <h4>For reporters</h4>
 
     <h4>Be polite</h4>
 
@@ -33,7 +33,7 @@
     note that it's been tested and found to work in the current version.)</p>
     <p>If a bug exists in the current CPAN version of a module, please do report the bug.</p>
     
-    <h3>For authors and maintainers</h3>
+    <h4>For authors and maintainers</h4>
 
     <h4>Be polite</h4>
 
@@ -41,14 +41,14 @@
     <p>Sure it can, but that does not disable the module's RT queue and users can still
     create tickets on rt.cpan.org.</p>
 
-    <h2>What is used to power this service?</h2>
+    <h3>What is used to power this service?</h3>
     <p>All parts used to build this service are open source software.
     The core is <a href="http://www.bestpractical.com/rt/">Request Tracker</a>
     from Best Practical Solutions. Everything else is either an extension for this
     site or a module from the CPAN.</p>
 
     <p>rt.cpan.org has some customizations which tie it to a particular RT version; at this
-    moment (March 2013) it's RT 4.0.</p>
+    moment (March 2021) it's RT 5.0.</p>
 
     <p>You can explore the source code by checking out the repository:<br />
     <pre>    git clone git://github.com/bestpractical/rt-extension-rt_cpan_org.git</pre><br />
@@ -57,7 +57,7 @@
     There is <a href="http://github.com/bestpractical/rt-extension-rt_cpan_org/blob/master/bin/pull-live">a script in the bin directory</a>
     of the extension that installs everything.</p>
 
-    <h2>Have a question about this service?</h2>
+    <h3>Have a question about this service?</h3>
     <p>
       If you have any questions <b>about rt.cpan.org</b>, feel free to
       <a href="mailto:rt-cpan-admin@bestpractical.com">send us mail</a> and we'll do our
