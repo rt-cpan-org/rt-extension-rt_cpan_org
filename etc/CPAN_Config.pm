@@ -18,8 +18,8 @@ Set( $AutocompleteOwnersForSearch, 1 );
 Set( $UsernameFormat, 'public' );
 
 # Email defaults; queues get their own dynamic addresses too
-Set( $CorrespondAddress, 'bugs@rt.cpan.org' );
-Set( $CommentAddress,    'comments@rt.cpan.org' );
+Set( $CorrespondAddress, 'bug@rt.cpan.org' );
+Set( $CommentAddress,    'comment@rt.cpan.org' );
 
 # The old $rtname used to be "cpan"; accept it.
 # See also BugTracker_Config.pm which extends this variable.
