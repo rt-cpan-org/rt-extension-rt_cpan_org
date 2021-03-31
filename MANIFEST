@@ -58,5 +58,6 @@ META.yml
 README
 static/css/rt.cpan.org.css
 static/images/cpan.png
+static/images/cpan.svg
 static/images/ui-anim_basic_16x16.gif
 static/js/rt.cpan.org.js

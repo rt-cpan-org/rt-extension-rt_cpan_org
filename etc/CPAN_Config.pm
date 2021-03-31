@@ -4,7 +4,7 @@
 Set( $Organization, "rt.cpan.org" );
 
 # Logo
-Set( $LogoURL, '/static/images/cpan.png' );
+Set( $LogoURL, '/static/images/cpan.svg' );
 Set( $LogoLinkURL, $WebURL );
 Set( $LogoAltText, "CPAN" );
 
