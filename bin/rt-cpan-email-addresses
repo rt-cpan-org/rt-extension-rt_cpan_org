@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use lib '/opt/rt5/local/lib', '/opt/rt5/lib';
 
+require RT;
+
 RT::LoadConfig();
 RT::Init();
 
