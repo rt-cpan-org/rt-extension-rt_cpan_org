@@ -7,4 +7,16 @@ if ($ARGSRef->{'Queue'}) {
     # package is in and using the result
     $ARGSRef->{'Queue'} =~ s/::/-/g;
 }
+else {
+    # Set an initial default queue just to load the create page
+    # In rt.cpan.org, all users get SeeQueue and CreateTicket
+    my $queues = RT::Queues->new($session{'CurrentUser'});
+    $queues->UnLimit;
+    while ( my $queue = $queues->Next ) {
+        if ( $queue->CurrentUserHasRight('CreateTicket') ) {
+            $ARGSRef->{'Queue'} = $queue->Name;
+            last;
+        }
+    }
+}
 </%init>
