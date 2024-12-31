@@ -17,10 +17,12 @@ html/Callbacks/rt_cpan_org/Elements/JavascriptConfig/Data
 html/Callbacks/rt_cpan_org/Elements/Login/AfterForm
 html/Callbacks/rt_cpan_org/Elements/Login/BeforeForm
 html/Callbacks/rt_cpan_org/Elements/MakeClicky/Default
+html/Callbacks/rt_cpan_org/Elements/PageLayout/BeforeBody
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByLifecycle/LinkBuilders
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByLifecycle/SQLFilter
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByStatus/LinkBuilders
 html/Callbacks/rt_cpan_org/Elements/QueueSummaryByStatus/SQLFilter
+html/Callbacks/rt_cpan_org/Elements/Quicksearch/ModifyCollection
 html/Callbacks/rt_cpan_org/Elements/Tabs/Privileged
 html/Callbacks/rt_cpan_org/Prefs/QueueList.html/ModifyQueues
 html/Callbacks/rt_cpan_org/Search/Simple.html/ModifyQuery

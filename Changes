@@ -1,3 +1,6 @@
+4.02 2024-12-32
+ - Show a message if an account has no email address set
+
 4.01 2015-05-09
  - Updated packaging
 
@@ -6,4 +9,4 @@
  - (other changes after that date without increasing version number)
 
 0.02 2008-03-05
- - intial release to the CPAN
+ - initial release to the CPAN
