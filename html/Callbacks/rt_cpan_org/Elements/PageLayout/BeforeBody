@@ -1,0 +1,16 @@
+
+<div class="alert alert-danger mt-2 mb-0">
+<div class="row">
+  <div class="col">
+    <p>This RT account (<% $CurrentUser->Name %>) currently has no email address set. If you are a CPAN author and logged in with your <a href="http://pause.perl.org">PAUSE</a> account, your email may have been disabled because of bounces in the past. Send email to <a href="mailto:rt-cpan-admin@bestpractical.com">rt-cpan-admin@bestpractical.com</a> to re-activate your email.</p>
+  </div>
+</div>
+</div>
+
+<%init>
+my $CurrentUser = $session{'CurrentUser'};
+return unless $CurrentUser && $CurrentUser->Id;
+
+# Only show if EmailAddress is not set
+return if $CurrentUser->EmailAddress;
+</%init>
