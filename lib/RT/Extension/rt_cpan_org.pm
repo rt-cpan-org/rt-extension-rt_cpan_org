@@ -82,6 +82,8 @@ sub ShowRequestedPage {
 
     SendSessionCookie();
 
+    ExpandShortenerCode($ARGS);
+
     # precache all system level rights for the current user
     $HTML::Mason::Commands::session{CurrentUser}->PrincipalObj->HasRights( Object => RT->System );
 
