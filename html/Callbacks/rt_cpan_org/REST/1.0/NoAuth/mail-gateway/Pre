@@ -1,0 +1,15 @@
+<%args>
+$queue => 1
+</%args>
+<%init>
+# Check that the target queue exists. If not, return "not ok" so rt-mailgate
+# exits 0 and postfix drops the message rather than retrying indefinitely.
+my $q = RT::Queue->new( RT->SystemUser );
+$q->Load($queue);
+unless ( $q->id ) {
+    RT->Logger->info("rt-cpan-org: Dropping mail to non-existent queue '$queue'");
+    $r->content_type('text/plain; charset=utf-8');
+    $m->out("not ok - no such queue: $queue\n");
+    $m->abort();
+}
+</%init>
