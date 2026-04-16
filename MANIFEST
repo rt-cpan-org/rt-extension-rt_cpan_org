@@ -25,6 +25,7 @@ html/Callbacks/rt_cpan_org/Elements/QueueSummaryByStatus/SQLFilter
 html/Callbacks/rt_cpan_org/Elements/Quicksearch/ModifyCollection
 html/Callbacks/rt_cpan_org/Elements/Tabs/Privileged
 html/Callbacks/rt_cpan_org/Prefs/QueueList.html/ModifyQueues
+html/Callbacks/rt_cpan_org/REST/1.0/NoAuth/mail-gateway/Pre
 html/Callbacks/rt_cpan_org/Search/Simple.html/ModifyQuery
 html/Callbacks/rt_cpan_org/Ticket/Create.html/Init
 html/Callbacks/rt_cpan_org/Ticket/Elements/ShowTransaction/ModifyDisplay

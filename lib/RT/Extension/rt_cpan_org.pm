@@ -52,7 +52,7 @@ use warnings;
 
 package RT::Extension::rt_cpan_org;
 
-our $VERSION = '4.02';
+our $VERSION = '4.03';
 
 =head1 NAME
 
@@ -81,6 +81,8 @@ sub ShowRequestedPage {
     my $m = $HTML::Mason::Commands::m;
 
     SendSessionCookie();
+
+    ExpandShortenerCode($ARGS);
 
     # precache all system level rights for the current user
     $HTML::Mason::Commands::session{CurrentUser}->PrincipalObj->HasRights( Object => RT->System );
