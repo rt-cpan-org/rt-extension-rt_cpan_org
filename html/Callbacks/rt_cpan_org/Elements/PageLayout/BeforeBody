@@ -2,15 +2,28 @@
 <div class="alert alert-danger mt-2 mb-0">
 <div class="row">
   <div class="col">
+% if ( ! $email ) {
     <p>This RT account (<% $CurrentUser->Name %>) currently has no email address set. If you are a CPAN author and logged in with your <a href="http://pause.perl.org">PAUSE</a> account, your email may have been disabled because of bounces in the past. Send email to <a href="mailto:rt-cpan-admin@bestpractical.com">rt-cpan-admin@bestpractical.com</a> to re-activate your email.</p>
+% }
+% else {
+    <p>This RT account (<% $CurrentUser->Name %>) currently has the email address <% $email %> set. <a href="https://log.perl.org/2026/04/cpanorg-email-forwarding-has-been-shut.html">@cpan.org email forwarding has been shut down</a>, so this address cannot receive email. To receive email from rt.cpan.org, change the Email field on your <a href="<% RT->Config->Get('WebPath') %>/Prefs/AboutMe.html">About me</a> settings page.</p>
+% }
   </div>
 </div>
 </div>
 
 <%init>
 my $CurrentUser = $session{'CurrentUser'};
-return unless $CurrentUser && $CurrentUser->Id;
+my $public      = RT->Config->Get('WebPublicUser') // '';
+return unless $CurrentUser
+    && $CurrentUser->Id
+    && lc $CurrentUser->Name ne lc $public;
 
-# Only show if EmailAddress is not set
-return if $CurrentUser->EmailAddress;
+# The session's CurrentUser keeps the values loaded at login, so it
+# would still show the old address after a change on About me.
+my $email = $CurrentUser->UserObj->EmailAddress;
+
+# The cpan.org forwarding service no longer works, so mail to an
+# @cpan.org address fails just as surely as having no address at all.
+return if $email && $email !~ /\@cpan\.org$/i;
 </%init>
