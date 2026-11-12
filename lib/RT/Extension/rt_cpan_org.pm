@@ -52,7 +52,7 @@ use warnings;
 
 package RT::Extension::rt_cpan_org;
 
-our $VERSION = '4.03';
+our $VERSION = '4.04';
 
 =head1 NAME
 

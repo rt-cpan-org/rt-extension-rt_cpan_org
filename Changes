@@ -1,3 +1,8 @@
+4.04 2026-11-11
+ - Show banner message for users with @cpan.org email address
+ - Do not show missing email banner for guest user
+ - Add details on updating an @cpan.org email address on the about page
+
 4.03 2026-04-16
  - Drop email to nonexistent queues
  - Call ExpandShortenerCode in ShowRequestedPage
